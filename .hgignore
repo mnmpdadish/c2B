@@ -1,0 +1,5 @@
+syntax: glob
+oneBody
+*.o
+src/tmp/*
+

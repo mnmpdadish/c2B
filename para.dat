@@ -1,0 +1,22 @@
+#para.dat
+#you can comment para.dat using '#'
+task 
+dos (-0.5:0.1:1.0)
+
+#hamiltonian parameters:
+ETA   0.1
+OMEGA 0
+t     1.0
+tp   -0.2
+tpp   0.13
+M     0.25
+
+
+#cuba parameters:
+EPSREL  0.1
+EPSABS  0.0001
+MAXEVAL 4000
+MINEVAL 40
+VERBOSE 1
+
+
