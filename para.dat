@@ -9,8 +9,8 @@ OMEGA 0
 t     1.0
 tp   -0.2
 tpp   0.13
-M     0.25
-
+M     0.5
+MU   -0.8
 
 #cuba parameters:
 EPSREL  0.1

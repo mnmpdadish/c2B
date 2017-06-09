@@ -2,4 +2,4 @@ syntax: glob
 oneBody
 *.o
 src/tmp/*
-
+*mdc.dat

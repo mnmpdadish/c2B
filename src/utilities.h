@@ -5,18 +5,20 @@
 
 #pragma once
 #include <cassert>
-#include <cctype>
-#include <cstdlib>
+//#include <cctype>
+//#include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include <iosfwd>
+//#include <iosfwd>
 #include <fstream>
 #include <string>
-#include <sstream>
+//#include <sstream>
 #include <limits>
 #include <math.h>
 #include <complex>
 #include <sys/stat.h>
+
+
 #define MAX_LENGHT std::numeric_limits<std::streamsize>::max()
 using namespace std;
 
