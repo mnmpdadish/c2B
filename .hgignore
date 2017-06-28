@@ -3,3 +3,4 @@ oneBody
 *.o
 src/tmp/*
 *mdc.dat
+*.out

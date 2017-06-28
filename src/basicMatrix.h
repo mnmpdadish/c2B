@@ -57,7 +57,14 @@ public:
     complex<double> trace()
     {
         complex<double> sum=0.0;
-        for(int i=0; i<nEntry; i++) sum+= data_[i*dim+i];  //sum on diagonal 
+        for(int i=0; i<dim; i++) sum+= data_[i*dim+i];  //sum on diagonal 
+        return sum;
+    };
+    
+    complex<double> partialTrace()
+    {
+        complex<double> sum=0.0;
+        for(int i=0; i<(dim/2); i++) sum+= data_[i*dim+i];  //sum on half of the diagonal (must be even)
         return sum;
     };
     

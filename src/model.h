@@ -19,6 +19,20 @@ public:
     double D=0.0;
 
     int nbOfTerms=8;
+    
+    //cuba parameters:
+    double EPSREL=0.0001;
+    double EPSABS=0.0001;
+    int MAXEVAL=1000000;
+    int MINEVAL=15000;
+    int VERBOSE=0;
+    
+    //density parameters:
+    double smallScale=0.2;
+    double largeScale=10.0;
+    double w_domain=1.0;
+    double pole=3.0;
+    double beta=50.0;
         
     //matrices
     BasicMatrix hamiltonian;
@@ -41,18 +55,15 @@ public:
         readNumber(file,"M",M);
         readNumber(file,"D",D);
         
-        
-        /*
         //cuba parameters:
-        readNumber(file,"EPSREL",EPSREL_);
-        readNumber(file,"EPSABS",EPSABS_);
-        readNumber(file,"MAXEVAL",MAXEVAL_); 
-        readNumber(file,"MINEVAL",MINEVAL_);
-        readNumber(file,"VERBOSE",VERBOSE_);
-        */
+        readNumber(file,"EPSREL",EPSREL);
+        readNumber(file,"EPSABS",EPSABS);
+        readNumber(file,"MAXEVAL",MAXEVAL); 
+        readNumber(file,"MINEVAL",MINEVAL);
+        readNumber(file,"VERBOSE",VERBOSE);
         
-        if(dbEqual(D,0.0)) printf("is not superconducter\n");
-        if(dbEqual(M,0.0)) printf("is not AFM\n");
+        //if(dbEqual(D,0.0)) printf("is not superconducter\n");
+        //if(dbEqual(M,0.0)) printf("is not AFM\n");
         
         
     }
@@ -79,11 +90,11 @@ public:
         double kxQ = 2*M_PI*px; //Qx=+0.5 : AFM SDW 
         double kyQ = 2*M_PI*py; //Qy=+0.5 : AFM SDW 
 
-        double tk = 2*t  * (cos(kx)    + cos(ky))
+        double tk =  2*t  * (cos(kx)    + cos(ky))
                     +2*tp * (cos(kx+ky) + cos(kx-ky))
                     +2*tpp* (cos(2*kx)  + cos(2*ky));
                     
-        double tkQ = 2*t  * (cos(kxQ)     + cos(kyQ))
+        double tkQ =  2*t  * (cos(kxQ)     + cos(kyQ))
                      +2*tp * (cos(kxQ+kyQ) + cos(kxQ-kyQ))
                      +2*tpp* (cos(2*kxQ)   + cos(2*kyQ));
                        
@@ -93,10 +104,10 @@ public:
         //assignation of the 4 by 4 Hk hamiltonian:
         //This matrix is in Nambu notation: indices 0,1 are normal and 2,3 are in the Nambu space.
         
-        hamiltonian(0,0)=-tk-MU;   hamiltonian(0,1)=M;          hamiltonian(0,2)=Dk;       hamiltonian(0,3)=0.0;
-        hamiltonian(1,0)=M;         hamiltonian(1,1)=-tkQ-MU;   hamiltonian(1,2)=0.0;       hamiltonian(1,3)=DkQ;
-        hamiltonian(2,0)=Dk;        hamiltonian(2,1)=0;           hamiltonian(2,2)=tk+MU;   hamiltonian(2,3)=M;
-        hamiltonian(3,0)=0.0;        hamiltonian(3,1)=DkQ;        hamiltonian(3,2)=M;        hamiltonian(3,3)=tkQ+MU;
+        hamiltonian(0,0)=-tk-MU;    hamiltonian(0,1)=M;           hamiltonian(0,2)=Dk;        hamiltonian(0,3)=0.0;
+        hamiltonian(1,0)=M;         hamiltonian(1,1)=-tkQ-MU;     hamiltonian(1,2)=0.0;       hamiltonian(1,3)=DkQ;
+        hamiltonian(2,0)=Dk;        hamiltonian(2,1)=0.0;         hamiltonian(2,2)=tk+MU;     hamiltonian(2,3)=M;
+        hamiltonian(3,0)=0.0;       hamiltonian(3,1)=DkQ;         hamiltonian(3,2)=M;         hamiltonian(3,3)=tkQ+MU;
         
         //hamiltonian.print();
     };
@@ -113,7 +124,20 @@ public:
                 if(i==j) green(i,j) += complex<double>(OMEGA,ETA);    
             }
         green.invert();
-        //green.print();
+    }
+    
+    void calculate_Gk(const double px, const double py, const complex<double> z)
+    //Gk = Green matrix
+    {
+        // to sum up, the Green matrix is Gk = 1/(z-Hk)
+        calculate_Hk(px, py);
+        for(int i=0;i<green.dim;i++)
+            for(int j=0;j<green.dim;j++)
+            {
+                green(i,j) = -hamiltonian(i,j);
+                if(i==j) green(i,j) += z;    
+            }
+        green.invert();
     }
     
     double calculate_Ak11(const double px, const double py)
@@ -132,16 +156,9 @@ public:
 
 
 
-private:
+//private:
 
-    //cuba parameters:
-    double EPSREL_=0.0001;
-    double EPSABS_=0.1;
-    int MAXEVAL_=4000;
-    int MINEVAL_=40;
-    int VERBOSE_=0;
-    
-    
+
     
 } Model;
 

@@ -10,7 +10,7 @@
 #include "utilities.h"
 #include "mdc.h"
 #include "interactive.h"
-
+#include "density.h"
 
 using namespace std;
 
@@ -25,28 +25,26 @@ int main(int argc, const char * argv[]) {
     model.calculate_Gk(0.1,0.5);
     
     MDC mdc(201);
-    mdc.printFile(model);
+    //mdc.printFile(model);
     
-    interactive_mdc(model,mdc);
+    //interactive_mdc(model,mdc);
+    //density(model);
     
     
     //cout << "\n" << sizeof(double) << " :)";
-    
     //cout << model.calculate_Ak11(0.1,0.5);
-
     //cout << "\n" << model.calculate_Aktot(0.1,0.5);
     
-/*    
     if(argc>=2){
 		string opt(argv[1]);
-        if (opt=="density") {density_david(p);}
-        else if (opt=="mdc") {calculateMDC(p);printMDC(p);}
-        else if (opt=="dos") {printDOS(p);}
+        if (opt=="d") {density(model);}
+        else if (opt=="mdc") {mdc.printFile(model);}
+        //else if (opt=="dos") {printDOS(p);}
 #ifdef INTERACTIVE
-//        else if (opt=="i") {printMDC_interactive(p);}
+        else if (opt=="i") {interactive_mdc(model,mdc);}
 #endif
         else {printf("could not understand the task to do.");}
-    } else {
+    }/* else {
         if (p.density_trigger) density_david(p);
         if (p.density_trigger_loop) density_david_loop(p);
         if (p.mdc_trigger) {calculateMDC(p); printMDC(p);}
