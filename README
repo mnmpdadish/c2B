@@ -1,0 +1,76 @@
+######
+README
+######
+
+This code calculates the conductivities in a basic tight-binding model (2D square lattice).
+
+
+
+COMPILING:
+
+In order to compile, install Gnuplot and Cuba on your computer and type in the 
+code directory:
+$ make
+
+
+
+DEPENDENCIES:
+
+Gnuplot: Any version of gnuplot should be enough to run the program properly, 
+         but the code was developped using version 5.0. One can turn off this 
+         dependency by removing the "-DINTERACTIVE" option in the makefile. This
+         will prevent to use the interactive version "./oneBody i" of the code.
+         
+Cuba: An integration library available via http://www.feynarts.de/cuba/
+      Version 4.0 or higher should be used to work and compile correctly.
+
+
+RUN:
+
+To check how to use the code, type:
+$ ./oneBody
+
+Read the help to learn about the different tasks available ('i', 'd', 'l', 'mdc').
+Any other task than the help needs a "para.dat" file that specify the model 
+parameters. An example of a "para.dat" file is contained in the "example" 
+directory. The "para.dat" file can contain the following parameters:
+
+ETA   Lorentzian broadening of the spectral weight
+OMEGA frequency (OMEGA=0 is the Fermi level)
+MU    chemical potential
+t     nearest neighbor hopping energy
+tp    second nearest neighbor hopping energy
+tpp   third nearest neighbor hopping energy
+M     antiferromagntic energy
+D     superconductivity energy
+
+nMu   number of Mu to calculate
+muMin minimum Mu of the loop
+muMax maximum Mu of the loop
+
+VERBOSE level of verbose of the program
+EPSREL  relative error demanded
+EPSABS  absolute error demanded
+MAXEVAL maximum number of evaluations
+MINEVAL minimum number of evaluations
+
+If any of these parameters are not found, default parameters will be used 
+(and printed on the screen).
+
+
+
+EXAMPLES:
+
+Examples of results files are found in the "example" directory. Running the code 
+with the present "para.dat" file should generate the same:
+
+"n.out" when calling the task "l"
+or
+"mdc.dat" when calling the task "mdc"
+
+The task "d" should calculate the value: "n = 0.775159".
+
+Plot in gnuplot with:
+gnuplot> plot 'n.out' u 1:2 w lp
+gnuplot> plot 'mdc.dat' matrix with image
+

@@ -87,6 +87,9 @@ inline void printCompact(vector<double> &values, vector<double> &valuesLast, int
     
     char tab[1024];
     for (int i=0;i< 8; i++){
+        #ifndef SUPRA
+        if(i == 5) continue;
+        #endif
         strcpy(tab, parameterNames[i].c_str());
         if(lastUpdate==i) printf(KBOLD);
         chooseColor(values[i],valuesLast[i]);
@@ -130,7 +133,31 @@ inline void prepareTerminalInputs()
     tcsetattr( fileno( stdin ), TCSANOW, &newSettings ); // set settings
 }   
 
+void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increaseParamKeys[])
+{
+    printf("\n\n----------------- oneBody Interactive Mode Help ------------------\n");
+    printf("Keyboard commands:\n");
+    printf("\tctrl-c  - EXIT the program \n");
+    printf("\tSPACE   - compute and plot mdc for selected paramters \n");
+    printf("\t+ -     - change resolution \n"); 
+    printf("\t) (     - change steps \n");
+    printf("\th       - print help \n\n");
+    printf("Resolution = %d by %d\n",mdc.dimension,mdc.dimension);
+    printf("Step =% 1.2f\n",step);
+    printf("Controlling keys and corresponding parameters\n");
 
+    string parameterNames[8] = {"mu","t","tp","tpp","M","D","w","eta"};
+    for(int key=0;key<8;key++)
+    {  
+       #ifndef SUPRA
+       if(key==5) continue;
+       #endif
+       printf("%s%s%c%s%c       ",KBOLD,KRED,decreaseParamKeys[key],KGRN,increaseParamKeys[key]);
+       for(unsigned int l=0; l<parameterNames[key].length(); l++) printf(" ");  // fill space with the parameter lenght name
+    }
+    printf("%s\n",KNRM);
+}
+                    
 void interactive_mdc(Model &model, MDC & mdc){
     // p was copied
     
@@ -147,20 +174,20 @@ void interactive_mdc(Model &model, MDC & mdc){
     valuesLast = values;
     valuesInit = values;
     
-    float step=0.01;
+    float step=0.05;
+    
+    char increaseParamKeys[] =  { 'q', 'w', 'e', 'r', 'u', 'i', 'o', 'p', '\0' };
+    char decreaseParamKeys[] =  { 'a', 's', 'd', 'f', 'j', 'k', 'l', ';', '\0' };
     
     printf("Interactive Mode\n");
     printf("resolution = %d by %d\n",mdc.dimension,mdc.dimension);
     printf("step =% 1.2f\n",step);
-    printf("Type 'h' for help. Controllable parameters are : \n");
+    //printf("Type 'h' for help. Controllable parameters are : \n");
     //printCompact(values,valuesLast);
-    printf("\n");
+    printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
     printCompact(values,valuesLast);
     
     prepareTerminalInputs();
-    
-    char increaseParamKeys[] =  { 'q', 'w', 'e', 'r', 'u', 'i', 'o', 'p', '\0' };
-    char decreaseParamKeys[] =  { 'a', 's', 'd', 'f', 'j', 'k', 'l', ';', '\0' };
     
     while ( 1 ) // yes, 1
     {
@@ -190,39 +217,13 @@ void interactive_mdc(Model &model, MDC & mdc){
                 if(c=='+')      { mdc.resize(mdc.dimension+100); lineKind(4); printf("resolution= %4d by %4d\r",mdc.dimension,mdc.dimension); fflush(stdout);}
                 else if(c=='-') { mdc.resize(mdc.dimension-100); lineKind(4); printf("resolution= %4d by %4d\r",mdc.dimension,mdc.dimension); fflush(stdout);}
                 
-                else if(c==')' and step < 10)  { step*=10; lineKind(5); printf("small steps=%1.3f%50s\r",step,""); fflush(stdout);}
-                else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("small steps=%1.3f%50s\r",step,""); fflush(stdout);}
-                
-                //else if(c=='t') { p.mdcFlip= !(p.mdcFlip); lineKind(6); if(!p.mdcFlip) printf("Not Flipped.%50s\r",""); else printf("Flipped.%50s\r",""); plotMDC(p,hImage); fflush(stdout);}  //flip
-                //else if(c=='g') { p.mdc=(p.mdc+1)%3; lineKind(6); printf("MDC mode:%d%50s\r",p.mdc,""); plotMDC(mdc,hImage); fflush(stdout);} //gorkov
-                
-                //else if(c=='y') { p.verbose=2; p.delete_mdc_data(); density(p); p.verbose=0; printCompact(mdc,backupPrint); }
+                else if(c==')' and step < 10)  { step*=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
+                else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
                 
                 if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
                 
                 else if(c=='h') {
-                    printf("\n\n----------------- oneBody Interactive Mode Help ------------------\n");
-                    printf("Keyboard commands:\n");
-                    printf("\tctrl-c  - EXIT the program \n");
-                    printf("\tSPACE   - compute and plot mdc for selected paramters \n");
-                    //printf("\ty       - calculate density \n"); 
-                    //printf("\tt       - flip MDC \n"); 
-                    //printf("\tg       - cycle through mdc, gorkov real, gorkov imaginary \n"); 
-                    //printf("\t=       - reset interface and parameter space to input file values\n"); 
-                    printf("\t+ -     - change resolution \n"); 
-                    printf("\t) (     - change steps \n");
-                    printf("\th       - print help \n\n");
-                    printf("Resolution = %d by %d\n",mdc.dimension,mdc.dimension);
-                    printf("Step =% 1.2f\n",step);
-                    printf("Controlling keys and corresponding parameters\n");
-                    
-                    string parameterNames[8] = {"mu","t","tp","tpp","M","D","w","eta"};
-                    for(int key=0;key<8;key++)
-                    {
-                            printf("%s%s%c%s%c       ",KBOLD,KRED,decreaseParamKeys[key],KGRN,increaseParamKeys[key]);
-                            for(unsigned int l=0; l<parameterNames[key].length(); l++) printf(" ");  // fill space with the parameter lenght name
-                    }
-                    printf("%s\n",KNRM);
+                    printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
                     printCompact(values,valuesLast);
                 }
             }

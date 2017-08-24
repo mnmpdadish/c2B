@@ -13,7 +13,11 @@
 void iwk_Integrand(Model &model, const complex<double> z, const double pxc, const double pyc, double* output) {
     model.calculate_Gk(pxc,pyc,z);
     complex<double> integral = 0.0;
+    #ifdef SUPRA
     integral += model.green.partialTrace();
+    #else
+    integral += model.green.trace();
+    #endif
     *output = real(integral/2.0-1.0/(z-model.pole));
 }
 
@@ -103,38 +107,42 @@ void cubaIntegrateDensity(Model & model, double* integral, double* error, int ve
     
 }
 
-void density(Model &model){
-    if(model.verbose >= 1) printf("calculating density, int over imaginary axis 'iw' (3 regions):\n");
+void density(Model & model){
+    printf("\nCalculating density, int over imaginary axis 'iw' (3 regions):\n");
     double integral[1]; //container for integral result (1D value, could be multiD)
     double error[1];
     integral[0] = 0;
     cubaIntegrateDensity(model,integral,error);
     
-    FILE *file = fopen("n.out","w");
-    fprintf(file," mu     n          err\n");
-    fprintf(file,"% 5.2f  % 8.6f  % 8.6f\n",model.MU,integral[0],error[0]);
-    fclose(file);
-    if(model.verbose >= 1) printf("\n n = %8.6f \n", integral[0]);
+    //FILE *file = fopen("n.out","w");
+    //fprintf(file," mu     n          err\n");
+    //fprintf(file,"% 5.2f  % 8.6f  % 8.6f\n",model.MU,integral[0],error[0]);
+    //fclose(file);
+    printf("\n n = %8.6f \n", integral[0]);
 }
 
-/*
-void density_loopMU(ParameterSet &p){
-    if(p.verbose >= 1) cout << endl << "Printing density file. \nCalculating density, int over imaginary axis 'iw' (3 regions):" << endl;
+
+void density_loopMU(Model & model){
+    if(model.verbose >= 1) printf("\nPrinting density file. \nCalculating density, int over imaginary axis 'iw' (3 regions):\n");
     double integral[1]; //container for integral result
     double error[1];
-    double mu0=p.getAmplitudeOf("mu");
+    //double mu0=model.MU;
     
     FILE *file = fopen("n.out","w");
     fprintf(file," mu     n          err\n");
-    for (auto& mu : p.loopValues) {
-        if(p.verbose >= 1) printf("\nmu = % 5.2f     %d %% done",mu,(int)(100*(mu-p.loop_start)/(double)(p.loop_end-p.loop_start)));
-        p.setAmplitudeOf("mu",mu);
-        cubaIntegrateDavid(p,integral, error, p.verbose);
+    printf(" mu     n          err\n");
+    
+    int m=0; for(m=0; m<model.nMu; m++)
+    {
+        double mu = model.muMin + m*(model.muMax-model.muMin)/(model.nMu-1);
+        //double percentage = (100.*m)/(1.0*model.nMu);
+        model.MU=mu;
+        cubaIntegrateDensity(model,integral, error, model.verbose);
         fprintf(file,"% 5.2f  % 8.6f  % 8.6f\n",mu,integral[0],error[0]);
+        printf("% 5.2f  % 8.6f  % 8.6f\n",mu,integral[0],error[0]);
     }
     fclose(file);
-    p.setAmplitudeOf("mu",mu0);
-    if(p.verbose >= 1) cout << '\r' << "Density file printed " << setw(20) << " " << endl;
+    if(model.verbose >= 1) printf("\rDensity file printed.\n");
 }
-*/
+
 

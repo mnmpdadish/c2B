@@ -22,13 +22,17 @@ public:
         
         for (int px=0; px<dimension; ++px) {
             if(model.verbose==1) printf("\r %d %%done", int(px/(double)(dimension)*100));
-            for (int py=0; py<dimension; ++py) {
+            int halfDimension = dimension/2;
+            for (int py=0; py<halfDimension; ++py) {
                 double koff = 0.5;
                 double px_continuous = (px+koff)/(double)dimension;
                 double py_continuous = (py+koff)/(double)dimension;
                 
-                //model.calculate_Gk(px_continuous,py_continuous);
-                mdc_data[dimension*px+py] = model.calculate_Ak11(px_continuous,py_continuous);
+                model.calculate_Gk(px_continuous, py_continuous);
+                mdc_data[dimension*px+py]   = -M_1_PI*imag(model.green(0,0));
+                
+                int pxQ = (px+halfDimension)%dimension; int pyQ = py+halfDimension;
+                mdc_data[dimension*pxQ+pyQ] = -M_1_PI*imag(model.green(1,1));
             }
         }
     }

@@ -14,47 +14,37 @@
 
 using namespace std;
 
-//#include <iomanip>
 
+void printHelp(){
+    printf("\nDifferent ways to use 'oneBody':\n\n");
+    #ifdef INTERACTIVE
+    printf("$ ./oneBody i\n");
+    printf("  Launch interactive plotting version.\n\n");
+    #endif
+    printf("$ ./oneBody d\n");
+    printf("  Calcualte density.\n\n");
+    printf("$ ./oneBody l\n");
+    printf("  Calcualte density loop over mu. (output = 'n.out')\n");
+    printf("  Plot in gnuplot with:\n");
+    printf("  gnuplot> plot 'n.out' u 1:2 w lp\n\n");
+    printf("$ ./oneBody mdc\n");
+    printf("  Print mdc.out file. (output = 'mdc.dat')\n");
+    printf("  Plot in gnuplot with:\n");
+    printf("  gnuplot> plot 'mdc.dat' matrix with image\n\n");
+}
 
 int main(int argc, const char * argv[]) {
-    printf("oneBuddy starting\n\n");
-    
-    Model model;
-    model.calculate_Hk(0.1,0.4);
-    model.calculate_Gk(0.1,0.5);
-    
-    MDC mdc(201);
-    //mdc.printFile(model);
-    
-    //interactive_mdc(model,mdc);
-    //density(model);
-    
-    
-    //cout << "\n" << sizeof(double) << " :)";
-    //cout << model.calculate_Ak11(0.1,0.5);
-    //cout << "\n" << model.calculate_Aktot(0.1,0.5);
-    
     if(argc>=2){
-		string opt(argv[1]);
-        if (opt=="d") {density(model);}
-        else if (opt=="mdc") {mdc.printFile(model);}
-        //else if (opt=="dos") {printDOS(p);}
-#ifdef INTERACTIVE
-        else if (opt=="i") {interactive_mdc(model,mdc);}
-#endif
-        else {printf("could not understand the task to do.");}
-    }/* else {
-        if (p.density_trigger) density_david(p);
-        if (p.density_trigger_loop) density_david_loop(p);
-        if (p.mdc_trigger) {calculateMDC(p); printMDC(p);}
-        if (p.dos_trigger) printDOS(p);
-#ifdef INTERACTIVE
-//      if (p.mdc_interactive_trigger) {printMDC_interactive(p);}
-#endif
+		  string opt(argv[1]);
+        if (opt=="d") {Model model; density(model);}
+        else if (opt=="l") {Model model; density_loopMU(model);}
+        else if (opt=="mdc") {Model model; MDC mdc(200); mdc.printFile(model);}
+        #ifdef INTERACTIVE
+        else if (opt=="i") {Model model; MDC mdc(200); interactive_mdc(model, mdc);}
+        #endif
+        else printHelp();
+    } else {
+        printHelp();
     }
-    cout << endl << "oneBuddy over." << endl;
-*/    
-
     return 0;
 }

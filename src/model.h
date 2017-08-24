@@ -17,7 +17,7 @@ public:
     double tpp=0.0;
     double M=0.0;
     double D=0.0;
-
+    
     int nbOfTerms=8;
     
     //cuba parameters:
@@ -33,12 +33,21 @@ public:
     double w_domain=1.0;
     double pole=3.0;
     double beta=50.0;
+    
+    int nMu=200;
+    double muMin=-4.0;
+    double muMax=4.0;
         
     //matrices
     BasicMatrix hamiltonian;
     BasicMatrix green;
     
-    Model(): hamiltonian(4), green(4) 
+    Model():
+    #ifdef SUPRA     
+    hamiltonian(4), green(4)
+    #else
+    hamiltonian(2), green(2)
+    #endif 
     {
         if (not exists("para.dat")) {printf("ERROR: couldn't find file 'para.dat'\n\n"); exit(1);}
         printf("reading parameters from para.dat\n\n") ;
@@ -61,6 +70,12 @@ public:
         readNumber(file,"MAXEVAL",MAXEVAL); 
         readNumber(file,"MINEVAL",MINEVAL);
         readNumber(file,"VERBOSE",VERBOSE);
+        
+        //density loop parameters:
+        readNumber(file,"nMu",nMu);
+        readNumber(file,"muMin",muMin);
+        readNumber(file,"muMax",muMax);    
+        
         
         //if(dbEqual(D,0.0)) printf("is not superconducter\n");
         //if(dbEqual(M,0.0)) printf("is not AFM\n");
@@ -98,38 +113,32 @@ public:
                      +2*tp * (cos(kxQ+kyQ) + cos(kxQ-kyQ))
                      +2*tpp* (cos(2*kxQ)   + cos(2*kyQ));
                        
+    
+        
+        #ifdef SUPRA     
         double Dk  = D * (cos(kx)  - cos(ky));
         double DkQ = D * (cos(kxQ) - cos(kyQ));
-    
+        
         //assignation of the 4 by 4 Hk hamiltonian:
         //This matrix is in Nambu notation: indices 0,1 are normal and 2,3 are in the Nambu space.
-        
         hamiltonian(0,0)=-tk-MU;    hamiltonian(0,1)=M;           hamiltonian(0,2)=Dk;        hamiltonian(0,3)=0.0;
         hamiltonian(1,0)=M;         hamiltonian(1,1)=-tkQ-MU;     hamiltonian(1,2)=0.0;       hamiltonian(1,3)=DkQ;
         hamiltonian(2,0)=Dk;        hamiltonian(2,1)=0.0;         hamiltonian(2,2)=tk+MU;     hamiltonian(2,3)=M;
         hamiltonian(3,0)=0.0;       hamiltonian(3,1)=DkQ;         hamiltonian(3,2)=M;         hamiltonian(3,3)=tkQ+MU;
         
+        #else   
+        //assignation of the 2 by 2 Hk hamiltonian:
+        //This matrix only has the spin up part: indices 0,1
+        hamiltonian(0,0)=-tk-MU;    hamiltonian(0,1)=M;      
+        hamiltonian(1,0)=M;         hamiltonian(1,1)=-tkQ-MU;
+        #endif 
         //hamiltonian.print();
     };
-    
-    void calculate_Gk(const double px, const double py)
-    //Gk = Green matrix
-    {
-        // to sum up, the Green matrix is Gk = 1/(omega+i*eta-Hk)
-        calculate_Hk(px, py);
-        for(int i=0;i<green.dim;i++)
-            for(int j=0;j<green.dim;j++)
-            {
-                green(i,j) = -hamiltonian(i,j);
-                if(i==j) green(i,j) += complex<double>(OMEGA,ETA);    
-            }
-        green.invert();
-    }
     
     void calculate_Gk(const double px, const double py, const complex<double> z)
     //Gk = Green matrix
     {
-        // to sum up, the Green matrix is Gk = 1/(z-Hk)
+        // the Green matrix is Gk = 1/(z-Hk)
         calculate_Hk(px, py);
         for(int i=0;i<green.dim;i++)
             for(int j=0;j<green.dim;j++)
@@ -140,24 +149,10 @@ public:
         green.invert();
     }
     
-    double calculate_Ak11(const double px, const double py)
+    void calculate_Gk(const double px, const double py)
     {
-        calculate_Gk(px, py);
-        return (-M_1_PI*imag(green(0,0)));
+        calculate_Gk(px, py, complex<double>(OMEGA,ETA));
     }
-    
-    double calculate_Aktot(const double px, const double py)
-    {
-        calculate_Gk(px, py);
-        double sum=0.0;
-        for(int i=0; i<green.nEntry; i++) sum+= -M_1_PI*imag(green.trace());  
-        return sum/green.dim;
-    }
-
-
-
-//private:
-
 
     
 } Model;

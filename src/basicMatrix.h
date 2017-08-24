@@ -1,8 +1,7 @@
 #pragma once
 #include "utilities.h"
 
-// MATRIX INVERSE:
-
+// MATRIX INVERSE LAPACK ROUTINES:
 extern "C" {
     void zgetrf_(int*, int* , complex<double>*, int*, int*, int*);
     void zgetri_(int*, complex<double>*, int*, int*, complex<double>*, int*, int*);
@@ -68,7 +67,6 @@ public:
         return sum;
     };
     
-
     void invert() {
         int INFO;
         zgetrf_(&dim,&dim,data_,&dim,IPIV_,&INFO);
