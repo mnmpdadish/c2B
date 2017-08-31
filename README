@@ -1,9 +1,14 @@
 ######
-README
+#README
 ######
 
 This code calculates the conductivities in a basic tight-binding model (2D square lattice).
 
+
+DOWNLOADING:
+
+In command line on a bash termianl (represented here with the "$" sign), type:
+$ hg clone https://bitbucket.org/mnmpdadish/onebody
 
 
 COMPILING:
