@@ -1,0 +1,24 @@
+######
+#README
+######
+
+In order to reproduce the results in the "results" directory, simply type 
+(in the present directory):
+
+$ oneBody l
+
+to produce the "n.out" file, and:
+
+$ oneBody mdc
+
+to produce the "mdc.dat" file. 
+
+"n.out" contains the density (n) as a function of the chemical potential (mu).
+"mdc.dat" contains an image of the Momentum density curve as a function of kx and ky.
+
+Plot in gnuplot with:
+gnuplot> plot 'n.out' u 1:2 w lp
+gnuplot> plot 'mdc.dat' matrix with image
+
+With the present "para.dat" file, the task "d" should calculate the value: "n = 0.775159".
+
