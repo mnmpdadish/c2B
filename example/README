@@ -22,3 +22,8 @@ gnuplot> plot 'mdc.dat' matrix with image
 
 With the present "para.dat" file, the task "d" should calculate the value: "n = 0.775159".
 
+The user can also run an interactive version of the code, to visualize via gnuplot the Fermi
+surface as a function of the parameters with the command:
+
+$ oneBody i
+

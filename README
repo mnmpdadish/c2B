@@ -4,22 +4,41 @@
 
 This code calculates the conductivities in a basic tight-binding model (2D square lattice).
 
-
+############
 DOWNLOADING:
 
 In command line on a bash termianl (represented here with the "$" sign), type:
-$ hg clone https://bitbucket.org/mnmpdadish/onebody
+$ hg clone https://bitbucket.org/quantique-udes/onebody
 
-
+##########
 COMPILING:
 
-In order to compile, install Gnuplot and Cuba on your computer and type in the 
-code directory:
+In order to compile, install gcc, gfortran, Gnuplot, Cuba, Lapack and BLAS 
+on your computer and type in the source code root directory:
 $ make
 
+This approach should work on Linux and Mac. 
+For mammouth, it is more appropriate to load the correct module instead of 
+installing any new libraries. 
+
+On Ms, type:
+
+ms$ module add gcc/6.4.0 cuba/4.0 intel64/12.1.3.293
+
+and on Mp:
+
+mp$ module add gcc/6.1.0 cuba/4.0 intel64/13.1.3.192
+
+The makefile is written to detect the mammouth version automatically. 
+The make command will generate the binary file "oneBody" in the root directory.
 
 
+#############
 DEPENDENCIES:
+
+gcc: Tested with version 4.8.1. Must be recent enough.
+
+gfortran: Tested with version 4.6.4. Must be recent enough.
 
 Gnuplot: Any version of gnuplot should be enough to run the program properly, 
          but the code was developped using version 5.0. One can turn off this 
@@ -29,13 +48,15 @@ Gnuplot: Any version of gnuplot should be enough to run the program properly,
 Cuba: An integration library available via http://www.feynarts.de/cuba/
       Version 4.0 or higher should be used to work and compile correctly.
 
+Lapack: Tested with version 3.5.0. Must be recent enough.
 
+####
 RUN:
 
 To check how to use the code, type:
 $ ./oneBody
 
-Read the help to learn about the different tasks available ('i', 'd', 'l', 'mdc').
+Read this help to learn about the different tasks available ('i', 'd', 'l', 'mdc').
 Any other task than the help needs a "para.dat" file that specify the model 
 parameters. An example of a "para.dat" file is contained in the "example" 
 directory. The "para.dat" file can contain the following parameters:
@@ -63,19 +84,18 @@ If any of these parameters are not found, default parameters will be used
 (and printed on the screen).
 
 
-
+#########
 EXAMPLES:
 
-Examples of results files are found in the "example" directory. Running the code 
-with the present "para.dat" file should generate the same:
+Examples of results files are found in the "example" directory. Informations 
+on how to reproduce these results by running the code are found in "example/README".
 
-"n.out" when calling the task "l"
-or
-"mdc.dat" when calling the task "mdc"
 
-The task "d" should calculate the value: "n = 0.775159".
+#####
+Reviewer: Maxime Charlebois
+Date: 19 september 2017
+Tested on Linux Ubuntu LTS 12.04 and 16.04
+quantique-udes v1.0 compliant
 
-Plot in gnuplot with:
-gnuplot> plot 'n.out' u 1:2 w lp
-gnuplot> plot 'mdc.dat' matrix with image
+
 

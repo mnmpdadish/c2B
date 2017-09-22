@@ -14,9 +14,10 @@ else ifeq ($(MAMMOUTH),mp2 )
 
 else
    COMPILER := gcc
-   LINK := -lcuba -llapack -lblas -lstdc++
+   #LINK := -lcuba -llapack -lstdc++
+   LINK := -lcuba -llapack -lblas -lm -lgfortran -lstdc++
    OPTIONS := -O2 -fpermissive -Wall -std=c++11 -DINTERACTIVE -DSUPRA
-   EXEC = $(HOME)/bin/oneBody
+   EXEC = oneBody
 endif
 
 HEADERS = src/utilities.h
