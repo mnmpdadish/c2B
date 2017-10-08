@@ -76,7 +76,11 @@ void cubaIntegrateDensity(Model & model, double* integral, double* error, int ve
           model.EPSREL, accur, verbose, model.MINEVAL, model.MAXEVAL, KEY, NULL, spin,
           &nregions, &neval, &fail, integralPortion, errorPortion, prob);
     
-    if(verboseIntegrate>=2) printf("Region 1 - Integral: %8.6f,   Error: %8.6f,   N_eval: %d \n", integralPortion[0]*model.w_domain*M_1_PI, errorPortion[0], neval);
+    if(verboseIntegrate>=2) {
+        printf("Region 1 - Integral: %8.6f,   Error: %8.6f,   N_eval: %d \n", 
+               integralPortion[0]*model.w_domain*M_1_PI, errorPortion[0], neval); 
+        fflush(stdout);
+    }
     integral[0] += integralPortion[0]*model.w_domain*M_1_PI;
     error[0] += abs(errorPortion[0]*model.w_domain*M_1_PI);
     model.w_domain = model.largeScale-model.smallScale;
@@ -87,7 +91,11 @@ void cubaIntegrateDensity(Model & model, double* integral, double* error, int ve
           model.EPSREL, accur, verbose, model.MINEVAL, model.MAXEVAL, KEY,  NULL, spin,
           &nregions, &neval, &fail, integralPortion, errorPortion, prob);
     
-    if(verboseIntegrate>=2) printf("Region 2 - Integral: %8.6f,   Error: %8.6f,   N_eval: %d \n", integralPortion[0]*model.w_domain*M_1_PI, errorPortion[0], neval);
+    if(verboseIntegrate>=2) {
+        printf("Region 2 - Integral: %8.6f,   Error: %8.6f,   N_eval: %d \n", 
+               integralPortion[0]*model.w_domain*M_1_PI, errorPortion[0], neval);
+        fflush(stdout);
+    }
     integral[0] += integralPortion[0]*model.w_domain*M_1_PI;
     error[0] += abs(errorPortion[0]*model.w_domain*M_1_PI);
     model.w_domain = 1.0/model.largeScale;
@@ -98,7 +106,11 @@ void cubaIntegrateDensity(Model & model, double* integral, double* error, int ve
           model.EPSREL, accur, verbose, model.MINEVAL, model.MAXEVAL, KEY,  NULL, spin,
           &nregions, &neval, &fail, integralPortion, errorPortion, prob);
     
-    if(verboseIntegrate>=2) printf("Region 3 - Integral: %8.6f,   Error: %8.6f,   N_eval: %d \n", integralPortion[0]*model.w_domain*M_1_PI, errorPortion[0], neval);
+    if(verboseIntegrate>=2) {
+        printf("Region 3 - Integral: %8.6f,   Error: %8.6f,   N_eval: %d \n", 
+               integralPortion[0]*model.w_domain*M_1_PI, errorPortion[0], neval);
+        fflush(stdout);
+    }
     integral[0] += integralPortion[0]*model.w_domain*M_1_PI;
     error[0] += abs(errorPortion[0]*model.w_domain*M_1_PI);
     
@@ -119,6 +131,7 @@ void density(Model & model){
     //fprintf(file,"% 5.2f  % 8.6f  % 8.6f\n",model.MU,integral[0],error[0]);
     //fclose(file);
     printf("\n n = %8.6f \n", integral[0]);
+    fflush(stdout);
 }
 
 
