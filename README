@@ -4,10 +4,12 @@
 
 This code calculates the conductivities in a basic tight-binding model (2D square lattice).
 
-############
-DOWNLOADING:
 
-In command line on a bash termianl (represented here with the "$" sign), type:
+############
+MAIN REPOSITORY:
+
+To get the most recent version of the source cod on this project,
+in command line on a bash termianl (represented here with the "$" sign), type:
 $ hg clone https://bitbucket.org/mnmpdadish/onebody
 
 ##########
@@ -93,9 +95,9 @@ on how to reproduce these results by running the code are found in "example/READ
 
 #####
 Reviewer: Maxime Charlebois
-Date: 19 september 2017
+Date: 8 october 2017
 Tested on Linux Ubuntu LTS 12.04 and 16.04
-quantique-udes v1.0 compliant
+quantique-udes v1.1 compliant
 
 
 
