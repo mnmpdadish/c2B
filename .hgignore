@@ -2,5 +2,7 @@ syntax: glob
 oneBody
 *.o
 src/tmp/*
+example/*.out
+example/mdc.dat
 ./*mdc.dat
 ./*.out
