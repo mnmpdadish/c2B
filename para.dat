@@ -3,12 +3,12 @@
 
 #hamiltonian parameters:
 ETA   0.1
-MU   -2.0
+MU   -0.5
 OMEGA 0
 t     1.0
 tp   -0.3
-tpp   0.2
-M     1.8
+tpp   0.0
+M     0.6
 D     0.0
 
 #cuba parameters:

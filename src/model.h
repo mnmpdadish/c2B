@@ -8,7 +8,7 @@ public:
 
     int verbose=1;
 
-    //hamiltonian parameters:
+    //tk parameters:
     double MU=0.0;
     double ETA=0.1;
     double OMEGA=0.0;    
@@ -39,22 +39,25 @@ public:
     double muMax=4.0;
         
     //matrices
-    BasicMatrix hamiltonian;
+    BasicMatrix tc;
+    BasicMatrix dtk;
+    BasicMatrix tc2;
+    BasicMatrix dtk2;
     BasicMatrix green;
+    BasicMatrix sigma;
     
     Model():
-    #ifdef SUPRA     
-    hamiltonian(4), green(4)
-    #else
-    hamiltonian(2), green(2)
-    #endif 
+    
+    tc(4), dtk(4), tc2(4), dtk2(4), green(4), sigma(4)
+    
+    
     {
         if (not exists("para.dat")) {printf("ERROR: couldn't find file 'para.dat'\n\n"); exit(1);}
         printf("reading parameters from para.dat\n\n") ;
         ifstream file;
         file.open("para.dat");
         
-        //hamiltonian parameters:
+        //tk parameters:
         readNumber(file,"MU",MU); 
         readNumber(file,"ETA",ETA);
         readNumber(file,"OMEGA",OMEGA);
@@ -79,6 +82,16 @@ public:
         
         //if(dbEqual(D,0.0)) printf("is not superconducter\n");
         //if(dbEqual(M,0.0)) printf("is not AFM\n");
+
+        tc(0,0)=  0.; tc(0,1)= -t;  tc(0,2)= -tp; tc(0,3)= -t;
+        tc(1,0)= -t;  tc(1,1)=  0.; tc(1,2)= -t;  tc(1,3)= -tp;
+        tc(2,0)= -tp; tc(2,1)= -t;  tc(2,2)=  0.; tc(2,3)= -t;
+        tc(3,0)= -t;  tc(3,1)= -tp; tc(3,2)= -t;  tc(3,3)=  0.;
+
+        tc2(0,0)=  0.; tc2(0,1)=  t;  tc2(0,2)= -tp; tc2(0,3)=  t;
+        tc2(1,0)=  t;  tc2(1,1)=  0.; tc2(1,2)=  t;  tc2(1,3)= -tp;
+        tc2(2,0)= -tp; tc2(2,1)=  t;  tc2(2,2)=  0.; tc2(2,3)=  t;
+        tc2(3,0)=  t;  tc2(3,1)= -tp; tc2(3,2)=  t;  tc2(3,3)=  0.;
         
         
     }
@@ -96,43 +109,29 @@ public:
     }
     */
     
-    void calculate_Hk(const double px, const double py)
-    //Hk = Hamiltonian matrix
+    void calculate_Hk(const double kx, const double ky)
+    //Hk = tk matrix
     {
-        double kx = 2*M_PI*(px-0.5); //offset to center the data
-        double ky = 2*M_PI*(py-0.5);
         
-        double kxQ = 2*M_PI*px; //Qx=+0.5 : AFM SDW 
-        double kyQ = 2*M_PI*py; //Qy=+0.5 : AFM SDW 
-
-        double tk =  2*t  * (cos(kx)    + cos(ky))
-                    +2*tp * (cos(kx+ky) + cos(kx-ky))
-                    +2*tpp* (cos(2*kx)  + cos(2*ky));
-                    
-        double tkQ =  2*t  * (cos(kxQ)     + cos(kyQ))
-                     +2*tp * (cos(kxQ+kyQ) + cos(kxQ-kyQ))
-                     +2*tpp* (cos(2*kxQ)   + cos(2*kyQ));
-                       
-    
+        complex<double> ex(cos(-kx*2.), sin(-kx*2.));
+        complex<double> emx = conj(ex);
+        complex<double> ey(cos(-ky*2.), sin(-ky*2.));
+        complex<double> emy = conj(ey);  
         
-        #ifdef SUPRA     
-        double Dk  = D * (cos(kx)  - cos(ky));
-        double DkQ = D * (cos(kxQ) - cos(kyQ));
+        //assignation of the 4 by 4 Hk tk:
+        dtk(0,0)=-tpp*(emx+ex+ey+emy);       dtk(0,1)=-t*ex;                    dtk(0,2)=-tp*(ex + ey + ex*ey);  dtk(0,3)=-t*ey;
+        dtk(1,0)=-t*emx;                     dtk(1,1)=-tpp*(emx+ex+ey+emy);     dtk(1,2)=-t*ey;                  dtk(1,3)=-tp*(emx + ey + emx*ey) ;
+        dtk(2,0)=-tp*(emx + emy + emx*emy);  dtk(2,1)=-t*emy;                   dtk(2,2)=-tpp*(emx+ex+ey+emy);   dtk(2,3)=-t*emx;
+        dtk(3,0)=-t*emy;                     dtk(3,1)=-tp*(ex + emy + ex*emy);  dtk(3,2)=-t*ex;                  dtk(3,3)=-tpp*(emx+ex+ey+emy);
         
-        //assignation of the 4 by 4 Hk hamiltonian:
-        //This matrix is in Nambu notation: indices 0,1 are normal and 2,3 are in the Nambu space.
-        hamiltonian(0,0)=-tk-MU;    hamiltonian(0,1)=M;           hamiltonian(0,2)=Dk;        hamiltonian(0,3)=0.0;
-        hamiltonian(1,0)=M;         hamiltonian(1,1)=-tkQ-MU;     hamiltonian(1,2)=0.0;       hamiltonian(1,3)=DkQ;
-        hamiltonian(2,0)=Dk;        hamiltonian(2,1)=0.0;         hamiltonian(2,2)=tk+MU;     hamiltonian(2,3)=M;
-        hamiltonian(3,0)=0.0;       hamiltonian(3,1)=DkQ;         hamiltonian(3,2)=M;         hamiltonian(3,3)=tkQ+MU;
+        // e^(i*pi) = -1;
         
-        #else   
-        //assignation of the 2 by 2 Hk hamiltonian:
-        //This matrix only has the spin up part: indices 0,1
-        hamiltonian(0,0)=-tk-MU;    hamiltonian(0,1)=M;      
-        hamiltonian(1,0)=M;         hamiltonian(1,1)=-tkQ-MU;
-        #endif 
-        //hamiltonian.print();
+//        dtk2(0,0)=-tpp*(emx+ex+ey+emy);      dtk2(0,1)= t*ex;                   dtk2(0,2)=-tp*(ex + ey + ex*ey); dtk2(0,3)= t*ey;
+//        dtk2(1,0)= t*emx;                    dtk2(1,1)=-tpp*(emx+ex+ey+emy);    dtk2(1,2)= t*ey;                 dtk2(1,3)=-tp*(emx + ey + emx*ey) ;
+//        dtk2(2,0)=-tp*(emx + emy + emx*emy); dtk2(2,1)= t*emy;                  dtk2(2,2)=-tpp*(emx+ex+ey+emy);  dtk2(2,3)= t*emx;
+//        dtk2(3,0)= t*emy;                    dtk2(3,1)=-tp*(ex + emy + ex*emy); dtk2(3,2)= t*ex;                 dtk2(3,3)=-tpp*(emx+ex+ey+emy);
+        
+        //tk.print();
     };
     
     void calculate_Gk(const double px, const double py, const complex<double> z)
@@ -140,12 +139,27 @@ public:
     {
         // the Green matrix is Gk = 1/(z-Hk)
         calculate_Hk(px, py);
+        for(int i=0;i<sigma.dim;i++)
+            for(int j=0;j<sigma.dim;j++)
+            {
+                // compact assembly:
+                //sigma(i,j) = -tc2(i,j) -dtk2(i,j);
+                
+                // exercise simon:
+                sigma(i,j) = -tc2(i,j);
+                
+                if(i==j) sigma(i,j) += z + MU;    
+            }
+        
+        sigma.invert();
+        
         for(int i=0;i<green.dim;i++)
             for(int j=0;j<green.dim;j++)
             {
-                green(i,j) = -hamiltonian(i,j);
-                if(i==j) green(i,j) += z;    
+                green(i,j) = -tc(i,j) -dtk(i,j) - M*M*sigma(i,j);
+                if(i==j) green(i,j) += z + MU;
             }
+        
         green.invert();
     }
     

@@ -17,7 +17,8 @@ else
    #MKL := /opt/intel/mkl/lib/intel64  #only to compile with MKL
    #LINK := -lcuba -lstdc++  ${MKL}/libmkl_intel_lp64.a -Wl,--start-group $(MKL)/libmkl_blas95_lp64.a $(MKL)/libmkl_lapack95_lp64.a $(MKL)/libmkl_sequential.a ${MKL}/libmkl_core.a -Wl,--end-group  -lgomp -lpthread -lm -ldl
    LINK := -lcuba -llapack -lblas -lm -lgfortran -lstdc++
-   OPTIONS := -fpermissive -Wall -std=c++11 -DINTERACTIVE -DSUPRA -O2 
+   OPTIONS := -fpermissive -Wall -std=c++11 -DINTERACTIVE -O2 
+   #-DSUPRA 
    EXEC = oneBody
 endif
 

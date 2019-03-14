@@ -21,18 +21,26 @@ public:
         if(model.verbose>=1) printf("printing MDC file\n");
         
         for (int px=0; px<dimension; ++px) {
-            if(model.verbose==1) printf("\r %d %%done", int(px/(double)(dimension)*100));
-            int halfDimension = dimension/2;
-            for (int py=0; py<halfDimension; ++py) {
-                double koff = 0.5;
-                double px_continuous = (px+koff)/(double)dimension;
-                double py_continuous = (py+koff)/(double)dimension;
+            for (int py=0; py<dimension; ++py) {
+                double px_continuous = M_PI * px/(double)(dimension-1.);
+                double py_continuous = M_PI * py/(double)(dimension-1.);
+                
+                double Ry[4] = {0.,0.,1.,1.};
+                double Rx[4] = {0.,1.,1.,0.};
                 
                 model.calculate_Gk(px_continuous, py_continuous);
-                mdc_data[dimension*px+py]   = -M_1_PI*imag(model.green(0,0));
                 
-                int pxQ = (px+halfDimension)%dimension; int pyQ = py+halfDimension;
-                mdc_data[dimension*pxQ+pyQ] = -M_1_PI*imag(model.green(1,1));
+                complex<double> G_per = 0.0;
+                for (int ii=0; ii<4; ++ii) {
+                  for (int jj=0; jj<4; ++jj) {
+                    double arg = ((Rx[jj]-Rx[ii])*px_continuous + (Ry[jj]-Ry[ii])*py_continuous);
+                    complex<double> phase(cos(arg), sin(arg));
+                    G_per += 1. * model.green(ii,jj) * phase; 
+                  }
+                }
+                
+                mdc_data[dimension*px+py]   = -M_1_PI*imag(G_per);
+                
             }
         }
     }

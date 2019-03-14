@@ -4,8 +4,8 @@
 #$ ./release.sh
 
 cd ..
-tar -cvzf onebody.tar.gz onebody --exclude-vcs-ignores --exclude-vcs --exclude='release.sh'
-mv onebody.tar.gz onebody/.
+tar -cvzf onebodyAFM_cluster.tar.gz onebodyAFM_cluster --exclude-vcs-ignores --exclude-vcs --exclude='release.sh'
+mv onebodyAFM_cluster.tar.gz onebodyAFM_cluster 
 
 #options used:
 #--exclude-vcs-ignores:  consider the .hgignore or .gitignore file to ignore files in the tar
