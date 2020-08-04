@@ -16,7 +16,15 @@ else
    COMPILER := gcc
    #MKL := /opt/intel/mkl/lib/intel64  #only to compile with MKL
    #LINK := -lcuba -lstdc++  ${MKL}/libmkl_intel_lp64.a -Wl,--start-group $(MKL)/libmkl_blas95_lp64.a $(MKL)/libmkl_lapack95_lp64.a $(MKL)/libmkl_sequential.a ${MKL}/libmkl_core.a -Wl,--end-group  -lgomp -lpthread -lm -ldl
-   LINK := -lcuba -llapack -lblas -lm -lgfortran -lstdc++
+   
+   UNAME_S := $(shell uname -s)
+   ifeq ($(UNAME_S),Linux)
+      LINK := -lcuba -llapack -lblas -lm -lgfortran -lstdc++
+   endif
+   ifeq ($(UNAME_S),Darwin)
+      LINK := -lcuba -llapack -lblas -lm -lstdc++
+   endif
+   
    OPTIONS := -fpermissive -Wall -std=c++11 -DINTERACTIVE -O2 
    #-DSUPRA 
    EXEC = oneBody

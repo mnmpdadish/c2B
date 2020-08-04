@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 
 #ifdef __APPLE__
-    #define _TERMINAL "wxt"
+    #define _TERMINAL "qt"
 #else
     #define _TERMINAL "wxt"
 #endif
