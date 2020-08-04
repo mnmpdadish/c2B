@@ -72,7 +72,7 @@ public:
 private:
     
     int nEntry_;
-    int lastUpdate=0;
+    // int lastUpdate=0;
     
     
 } MDC;

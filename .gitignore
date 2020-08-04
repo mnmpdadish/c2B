@@ -5,6 +5,7 @@ example/n.out
 example/mdc.dat
 ./mdc.dat
 ./n.out
+./dos.out
 *.tar.gz
 
 onebody/mdc.dat
