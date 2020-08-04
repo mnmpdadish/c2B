@@ -1,4 +1,3 @@
-syntax: glob
 oneBody
 *.o
 src/tmp/*
@@ -8,7 +7,6 @@ example/mdc.dat
 ./n.out
 *.tar.gz
 
-#for the tar in the release.sh command:
 onebody/mdc.dat
 onebody/n.out
 onebody/example/n.out
