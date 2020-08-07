@@ -44,7 +44,7 @@ int main(int argc, const char * argv[]) {
         if (opt=="d") {Model model; density(model);}
         else if (opt=="l") {Model model; density_loopMU(model);}
         else if (opt=="mdc") {Model model; MDC mdc(200); mdc.printFile(model);}
-        else if (opt=="dos") {Model model; DOS dos(-3.0,3.0,400); dos.printFile(model);}
+        else if (opt=="dos") {Model model; DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model);}
         #ifdef INTERACTIVE
         else if (opt=="i") {Model model; MDC mdc(200); interactive_mdc(model, mdc);}
         #endif

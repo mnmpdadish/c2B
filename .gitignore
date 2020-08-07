@@ -4,8 +4,7 @@ src/tmp/*
 example/n.out
 example/mdc.dat
 ./mdc.dat
-./n.out
-./dos.out
+*.out
 *.tar.gz
 
 onebody/mdc.dat

@@ -36,6 +36,10 @@ public:
     
     int periodization = 0; //0=Green, 1=Cumulant, 2=Compact Assembly
 
+    int nOmega=200;
+    double omegaMin=-4.0;
+    double omegaMax=4.0;
+
     int nMu=200;
     double muMin=-4.0;
     double muMax=4.0;
@@ -73,6 +77,7 @@ public:
         readNumber(file,"tpp",tpp);
         readNumber(file,"M",M);
         readNumber(file,"D",D);
+        readNumber(file,"periodization",periodization);
         
         //cuba parameters:
         readNumber(file,"EPSREL",EPSREL);
@@ -81,12 +86,14 @@ public:
         readNumber(file,"MINEVAL",MINEVAL);
         readNumber(file,"VERBOSE",VERBOSE);
         
-        readNumber(file,"periodization",periodization);
+        readNumber(file,"nOmega",nOmega);
+        readNumber(file,"omegaMin",omegaMin);
+        readNumber(file,"omegaMax",omegaMax);
 
         //density loop parameters:
         readNumber(file,"nMu",nMu);
         readNumber(file,"muMin",muMin);
-        readNumber(file,"muMax",muMax);    
+        readNumber(file,"muMax",muMax); 
         
         
         //if(dbEqual(D,0.0)) printf("is not superconducter\n");

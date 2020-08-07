@@ -141,12 +141,15 @@ void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increasePa
     printf("\tSPACE   - compute and plot mdc for selected paramters \n");
     printf("\t+ -     - change resolution \n"); 
     printf("\t) (     - change steps \n");
+    printf("\tt       - save mdc file \n");
+    printf("\ty       - compute and save dos file \n");
+    printf("\tg       - toggle periodization \n");
     printf("\th       - print help \n\n");
     printf("Resolution = %d by %d\n",mdc.dimension,mdc.dimension);
     printf("Step =% 1.2f\n",step);
     printf("Controlling keys and corresponding parameters\n");
 
-    string parameterNames[8] = {"mu","t","tp","tpp","M","D","w","eta"};
+    string parameterNames[8] = {"mu","t","tp","tpp","M","w","eta","D"};
     for(int key=0;key<8;key++)
     {  
        #ifndef SUPRA
@@ -221,11 +224,15 @@ void interactive_mdc(Model &model, MDC & mdc){
                 else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
                 
                 else if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
-                else if(c=='y') { DOS dos(-2.0,2.0,200); dos.printFile(model);}
+                else if(c=='y') { DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model); lineKind(0); printf("dos printed"); fflush(stdout);}
                 else if(c=='t') { mdc.printFile(model);}
                 else if(c=='g') {
                     model.periodization = (model.periodization+1)%3;
-                    mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast);
+                    mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
+                    if (model.periodization==0) printf("G periodization");
+                    if (model.periodization==1) printf("M periodization");
+                    if (model.periodization==2) printf("exact          ");
+                    fflush(stdout);
                 }
 
                 else if(c=='h') {
