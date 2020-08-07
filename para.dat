@@ -7,8 +7,8 @@ MU   -0.5
 OMEGA 0
 t     1.0
 tp   -0.3
-tpp   0.0
-M     0.6
+tpp   0.2
+M     1.3
 D     0.0
 
 #cuba parameters:
@@ -17,6 +17,8 @@ EPSABS  0.00001
 MAXEVAL 400000
 MINEVAL 4000
 VERBOSE 0
+
+periodization 0
 
 #density loop parameters:
 nMu   201

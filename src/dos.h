@@ -11,23 +11,10 @@ static int dosIntegrand(const int* ndim, const double x[],
     double px_continuous = M_PI * x[0];
     double py_continuous = M_PI * x[1];
     Model *model = (Model*)userdata;
-    complex<double> z(model->OMEGA, model->ETA);
     
-    model->calculate_Gk(px_continuous, py_continuous);
+    model->calculate_Gperiodized(px_continuous, py_continuous);
+    *result = -M_1_PI*imag(model->G_per);
     
-    // periodization (this should probably go
-    double Ry[4] = {0.,0.,1.,1.};
-    double Rx[4] = {0.,1.,1.,0.};
-    complex<double> G_per = 0.0;
-    for (int ii=0; ii<4; ++ii) {
-        for (int jj=0; jj<4; ++jj) {
-            double arg = ((Rx[jj]-Rx[ii])*px_continuous + (Ry[jj]-Ry[ii])*py_continuous);
-            complex<double> phase(cos(arg), sin(arg));
-            G_per += 1. * model->green(ii,jj) * phase; 
-        }
-    }
-
-    *result = -M_1_PI*imag(G_per);
     return 0;
 }
 

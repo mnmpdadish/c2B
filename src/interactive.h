@@ -220,8 +220,13 @@ void interactive_mdc(Model &model, MDC & mdc){
                 else if(c==')' and step < 10)  { step*=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
                 else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
                 
-                if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
-                if(c=='y') { DOS dos(-2.0,2.0,200); dos.printFile(model);}
+                else if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
+                else if(c=='y') { DOS dos(-2.0,2.0,200); dos.printFile(model);}
+                else if(c=='t') { mdc.printFile(model);}
+                else if(c=='g') {
+                    model.periodization = (model.periodization+1)%3;
+                    mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast);
+                }
 
                 else if(c=='h') {
                     printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
