@@ -227,11 +227,12 @@ void interactive_mdc(Model &model, MDC & mdc){
                 else if(c=='y') { DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model); lineKind(0); printf("dos printed"); fflush(stdout);}
                 else if(c=='t') { mdc.printFile(model);}
                 else if(c=='g') {
-                    model.periodization = (model.periodization+1)%3;
+                    model.periodization = (model.periodization+1)%4;
                     mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
-                    if (model.periodization==0) printf("G periodization");
-                    if (model.periodization==1) printf("M periodization");
-                    if (model.periodization==2) printf("exact          ");
+                    if (model.periodization==0) printf("G periodization ");
+                    if (model.periodization==1) printf("M periodization ");
+                    if (model.periodization==2) printf("Compact assembly");
+                    if (model.periodization==3) printf("exact           ");
                     fflush(stdout);
                 }
 

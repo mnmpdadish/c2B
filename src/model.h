@@ -34,7 +34,7 @@ public:
     double pole=3.0;
     double beta=50.0;
     
-    int periodization = 0; //0=Green, 1=Cumulant, 2=Compact Assembly
+    int periodization = 0; //0=Green, 1=Cumulant, 2=Compact Assembly, 3=exact
 
     int nOmega=200;
     double omegaMin=-4.0;
@@ -49,6 +49,7 @@ public:
     BasicMatrix dtk;
     BasicMatrix tc2;
     BasicMatrix dtk2;
+    BasicMatrix dtk3;
     BasicMatrix green;
     BasicMatrix cumul;
     BasicMatrix sigma;
@@ -59,7 +60,7 @@ public:
     
     Model():
     
-    tc(4), dtk(4), tc2(4), dtk2(4), green(4), cumul(4), sigma(4)
+    tc(4), dtk(4), tc2(4), dtk2(4), dtk3(4), green(4), cumul(4), sigma(4)
     
 
     {
@@ -144,6 +145,11 @@ public:
         dtk2(2,0)=-tp*(emx + emy + emx*emy); dtk2(2,1)= t*emy;                  dtk2(2,2)=-tpp*(emx+ex+ey+emy);  dtk2(2,3)= t*emx;
         dtk2(3,0)= t*emy;                    dtk2(3,1)=-tp*(ex + emy + ex*emy); dtk2(3,2)= t*ex;                 dtk2(3,3)=-tpp*(emx+ex+ey+emy);
         //tk.print();
+
+        dtk3(0,0)= 0;                        dtk3(0,1)= t*ex;                   dtk3(0,2)=-tp*(ex + ey + ex*ey); dtk3(0,3)= t*ey;
+        dtk3(1,0)= t*emx;                    dtk3(1,1)= 0;                      dtk3(1,2)= t*ey;                 dtk3(1,3)=-tp*(emx + ey + emx*ey) ;
+        dtk3(2,0)=-tp*(emx + emy + emx*emy); dtk3(2,1)= t*emy;                  dtk3(2,2)= 0;                    dtk3(2,3)= t*emx;
+        dtk3(3,0)= t*emy;                    dtk3(3,1)=-tp*(ex + emy + ex*emy); dtk3(3,2)= t*ex;                 dtk3(3,3)= 0;
     };
     
     //*
@@ -156,7 +162,8 @@ public:
             {
                 sigma(i,j) = -tc2(i,j);
                 if (i==j) sigma(i,j) += z + MU;  
-                if (periodization==2) sigma(i,j) += -dtk2(i,j);
+                if (periodization==2) sigma(i,j) += -dtk3(i,j);
+                if (periodization==3) sigma(i,j) += -dtk2(i,j);
             }
 
         sigma.invert();
@@ -224,7 +231,7 @@ public:
                 for (int jj=0; jj<4; ++jj) {
                     double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
                     complex<double> phase(cos(arg), sin(arg));
-                    M_per += 1. * cumul(ii,jj) * phase; 
+                    M_per += 0.25 * cumul(ii,jj) * phase; 
                 }
             }
             epsilon_k = -2*t*(cos(px)+cos(py)) -4*tp*cos(px)*cos(py) -2*tpp*(cos(2*px)+cos(2*py));
@@ -237,7 +244,7 @@ public:
                 for (int jj=0; jj<4; ++jj) {
                     double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
                     complex<double> phase(cos(arg), sin(arg));
-                    G_per += 1. * green(ii,jj) * phase; 
+                    G_per += 0.25 * green(ii,jj) * phase; 
                 }
             }
         }
