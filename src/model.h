@@ -113,12 +113,6 @@ public:
         tc2(2,0)= -tp; tc2(2,1)=  t;  tc2(2,2)=  0.; tc2(2,3)=  t;
         tc2(3,0)=  t;  tc2(3,1)= -tp; tc2(3,2)=  t;  tc2(3,3)=  0.;
 
-        //this is for YRZ
-        delta(0,0)= 0.; delta(0,1)=  M; delta(0,2)= 0.; delta(0,3)= -M;
-        delta(1,0)=  M; delta(1,1)= 0.; delta(1,2)= -M; delta(1,3)= 0.;
-        delta(2,0)= 0.; delta(2,1)= -M; delta(2,2)= 0.; delta(2,3)=  M;
-        delta(3,0)= -M; delta(3,1)= 0.; delta(3,2)=  M; delta(3,3)= 0.;
-
     }
     
     bool isSuperconductive() {return dbEqual(D,0.0);};
@@ -161,6 +155,13 @@ public:
             deltak(2,0)= 0.;          deltak(2,1)= -M*(1.+emy);  deltak(2,2)= 0.;          deltak(2,3)=  M*(1.+emx);
             deltak(3,0)= -M*(1.+emy); deltak(3,1)= 0.;           deltak(3,2)=  M*(1.+ex);  deltak(3,3)= 0.;
           
+          }
+          else{
+            //this is for YRZ
+            delta(0,0)= 0.; delta(0,1)=  M; delta(0,2)= 0.; delta(0,3)= -M;
+            delta(1,0)=  M; delta(1,1)= 0.; delta(1,2)= -M; delta(1,3)= 0.;
+            delta(2,0)= 0.; delta(2,1)= -M; delta(2,2)= 0.; delta(2,3)=  M;
+            delta(3,0)= -M; delta(3,1)= 0.; delta(3,2)=  M; delta(3,3)= 0.;
           }
         }
         else{
