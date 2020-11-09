@@ -19,7 +19,7 @@ else
    
    UNAME_S := $(shell uname -s)
    ifeq ($(UNAME_S),Linux)
-      LINK := -lcuba -llapack -lblas -lm -lgfortran -lstdc++
+      LINK := -lcuba -llapack -lblas -lm -lstdc++
    endif
    ifeq ($(UNAME_S),Darwin)
       LINK := -lcuba -llapack -lblas -lm -lstdc++

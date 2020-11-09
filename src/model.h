@@ -35,6 +35,7 @@ public:
     double beta=50.0;
     
     int periodization = 0; //0=Green, 1=Cumulant, 2=Compact Assembly, 3=exact
+    int model = 0; //0=afm, 1=YRZ
 
     int nOmega=200;
     double omegaMin=-4.0;
@@ -50,9 +51,12 @@ public:
     BasicMatrix tc2;
     BasicMatrix dtk2;
     BasicMatrix dtk3;
+    BasicMatrix dtk4;
     BasicMatrix green;
     BasicMatrix cumul;
     BasicMatrix sigma;
+    BasicMatrix delta;
+    BasicMatrix deltak;
     complex<double> G_per;
     complex<double> M_per;
 
@@ -60,8 +64,7 @@ public:
     
     Model():
     
-    tc(4), dtk(4), tc2(4), dtk2(4), dtk3(4), green(4), cumul(4), sigma(4)
-    
+    tc(4), dtk(4), tc2(4), dtk2(4), dtk3(4), dtk4(4), green(4), cumul(4), sigma(4), delta(4), deltak(4)
 
     {
         if (not exists("para.dat")) {printf("ERROR: couldn't find file 'para.dat'\n\n"); exit(1);}
@@ -109,7 +112,13 @@ public:
         tc2(1,0)=  t;  tc2(1,1)=  0.; tc2(1,2)=  t;  tc2(1,3)= -tp;
         tc2(2,0)= -tp; tc2(2,1)=  t;  tc2(2,2)=  0.; tc2(2,3)=  t;
         tc2(3,0)=  t;  tc2(3,1)= -tp; tc2(3,2)=  t;  tc2(3,3)=  0.;
-        
+
+        //this is for YRZ
+        delta(0,0)= 0.; delta(0,1)=  M; delta(0,2)= 0.; delta(0,3)= -M;
+        delta(1,0)=  M; delta(1,1)= 0.; delta(1,2)= -M; delta(1,3)= 0.;
+        delta(2,0)= 0.; delta(2,1)= -M; delta(2,2)= 0.; delta(2,3)=  M;
+        delta(3,0)= -M; delta(3,1)= 0.; delta(3,2)=  M; delta(3,3)= 0.;
+
     }
     
     bool isSuperconductive() {return dbEqual(D,0.0);};
@@ -138,18 +147,35 @@ public:
         dtk(1,0)=-t*emx;                     dtk(1,1)=-tpp*(emx+ex+ey+emy);     dtk(1,2)=-t*ey;                  dtk(1,3)=-tp*(emx + ey + emx*ey) ;
         dtk(2,0)=-tp*(emx + emy + emx*emy);  dtk(2,1)=-t*emy;                   dtk(2,2)=-tpp*(emx+ex+ey+emy);   dtk(2,3)=-t*emx;
         dtk(3,0)=-t*emy;                     dtk(3,1)=-tp*(ex + emy + ex*emy);  dtk(3,2)=-t*ex;                  dtk(3,3)=-tpp*(emx+ex+ey+emy);
-        
-        // e^(i*pi) = -1;
-        dtk2(0,0)=-tpp*(emx+ex+ey+emy);      dtk2(0,1)= t*ex;                   dtk2(0,2)=-tp*(ex + ey + ex*ey); dtk2(0,3)= t*ey;
-        dtk2(1,0)= t*emx;                    dtk2(1,1)=-tpp*(emx+ex+ey+emy);    dtk2(1,2)= t*ey;                 dtk2(1,3)=-tp*(emx + ey + emx*ey) ;
-        dtk2(2,0)=-tp*(emx + emy + emx*emy); dtk2(2,1)= t*emy;                  dtk2(2,2)=-tpp*(emx+ex+ey+emy);  dtk2(2,3)= t*emx;
-        dtk2(3,0)= t*emy;                    dtk2(3,1)=-tp*(ex + emy + ex*emy); dtk2(3,2)= t*ex;                 dtk2(3,3)=-tpp*(emx+ex+ey+emy);
-        //tk.print();
 
-        dtk3(0,0)= 0;                        dtk3(0,1)= t*ex;                   dtk3(0,2)=-tp*(ex + ey + ex*ey); dtk3(0,3)= t*ey;
-        dtk3(1,0)= t*emx;                    dtk3(1,1)= 0;                      dtk3(1,2)= t*ey;                 dtk3(1,3)=-tp*(emx + ey + emx*ey) ;
-        dtk3(2,0)=-tp*(emx + emy + emx*emy); dtk3(2,1)= t*emy;                  dtk3(2,2)= 0;                    dtk3(2,3)= t*emx;
-        dtk3(3,0)= t*emy;                    dtk3(3,1)=-tp*(ex + emy + ex*emy); dtk3(3,2)= t*ex;                 dtk3(3,3)= 0;
+        if(model==1){//this is for YRZ
+          //assignation of the 4 by 4 Hk tk:
+          dtk4(0,0)=0;                          dtk(0,1)=-t*ex;                    dtk(0,2)=-tp*(ex + ey + ex*ey);  dtk(0,3)=-t*ey;
+          dtk4(1,0)=-t*emx;                     dtk(1,1)=0;                        dtk(1,2)=-t*ey;                  dtk(1,3)=-tp*(emx + ey + emx*ey) ;
+          dtk4(2,0)=-tp*(emx + emy + emx*emy);  dtk(2,1)=-t*emy;                   dtk(2,2)=0;                      dtk(2,3)=-t*emx;
+          dtk4(3,0)=-t*emy;                     dtk(3,1)=-tp*(ex + emy + ex*emy);  dtk(3,2)=-t*ex;                  dtk(3,3)=0;
+
+          if (periodization>=2){
+            deltak(0,0)= 0.;          deltak(0,1)=  M*(1.+ex);   deltak(0,2)= 0.;          deltak(0,3)= -M*(1.+ey);
+            deltak(1,0)=  M*(1.+emx); deltak(1,1)= 0.;           deltak(1,2)= -M*(1.+ey);  deltak(1,3)= 0.;
+            deltak(2,0)= 0.;          deltak(2,1)= -M*(1.+emy);  deltak(2,2)= 0.;          deltak(2,3)=  M*(1.+emx);
+            deltak(3,0)= -M*(1.+emy); deltak(3,1)= 0.;           deltak(3,2)=  M*(1.+ex);  deltak(3,3)= 0.;
+          
+          }
+        }
+        else{
+          // e^(i*pi) = -1;
+          dtk2(0,0)=-tpp*(emx+ex+ey+emy);      dtk2(0,1)= t*ex;                   dtk2(0,2)=-tp*(ex + ey + ex*ey); dtk2(0,3)= t*ey;
+          dtk2(1,0)= t*emx;                    dtk2(1,1)=-tpp*(emx+ex+ey+emy);    dtk2(1,2)= t*ey;                 dtk2(1,3)=-tp*(emx + ey + emx*ey) ;
+          dtk2(2,0)=-tp*(emx + emy + emx*emy); dtk2(2,1)= t*emy;                  dtk2(2,2)=-tpp*(emx+ex+ey+emy);  dtk2(2,3)= t*emx;
+          dtk2(3,0)= t*emy;                    dtk2(3,1)=-tp*(ex + emy + ex*emy); dtk2(3,2)= t*ex;                 dtk2(3,3)=-tpp*(emx+ex+ey+emy);
+          //tk.print();
+
+          dtk3(0,0)= 0;                        dtk3(0,1)= t*ex;                   dtk3(0,2)=-tp*(ex + ey + ex*ey); dtk3(0,3)= t*ey;
+          dtk3(1,0)= t*emx;                    dtk3(1,1)= 0;                      dtk3(1,2)= t*ey;                 dtk3(1,3)=-tp*(emx + ey + emx*ey) ;
+          dtk3(2,0)=-tp*(emx + emy + emx*emy); dtk3(2,1)= t*emy;                  dtk3(2,2)= 0;                    dtk3(2,3)= t*emx;
+          dtk3(3,0)= t*emy;                    dtk3(3,1)=-tp*(ex + emy + ex*emy); dtk3(3,2)= t*ex;                 dtk3(3,3)= 0;
+        }
     };
     
     //*
@@ -173,6 +199,34 @@ public:
             {
                 sigma(i,j) = M*M*sigma(i,j);
             }
+    }
+
+    //*
+    void calculate_sigmaYRZ(const complex<double> z)
+    //S = sigma matrix
+    {
+        // the self-energy matrix is S = 1/(z+mu-tc2)
+        for(int i=0;i<sigma.dim;i++)
+            for(int j=0;j<sigma.dim;j++)
+            {
+                sigma(i,j) = -tc(i,j);
+                if (i==j) sigma(i,j) += z;  
+                if (periodization==2) sigma(i,j) += -dtk4(i,j);
+                if (periodization==3) sigma(i,j) += -dtk(i,j);
+            }
+
+        sigma.invert();
+        //deltak.print();
+        //delta.print();
+        if(periodization>=2){ 
+          sigma.leftright_MatrixMultiplication(&deltak);
+        }
+        else{ 
+          sigma.leftright_MatrixMultiplication(&delta);
+        }
+        //sigma.print();
+        //printf("salut \n\n");
+        
     }
 
 
@@ -208,7 +262,10 @@ public:
     {
         complex<double> z(OMEGA,ETA);
         calculate_dtk(px, py);
-        calculate_sigma(z); // could be omitted when z doesn't change
+        if(model==0)
+          calculate_sigma(z); // could be omitted when z doesn't change
+        else
+          calculate_sigmaYRZ(z);
         calculate_Gk(px, py, z);
     }
 
@@ -222,7 +279,10 @@ public:
 
 
         calculate_dtk(px, py);
-        calculate_sigma(z); // could be omitted when z doesn't change
+        if(model==0)
+          calculate_sigma(z); // could be omitted when z doesn't change
+        else
+          calculate_sigmaYRZ(z);
         
         if (periodization==1){
             calculate_cumulant(z); // could be omitted when z doesn't change

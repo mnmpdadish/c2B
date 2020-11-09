@@ -18,7 +18,7 @@ static int dosIntegrand(const int* ndim, const double x[],
     return 0;
 }
 
-void cubaIntegrateDOS(Model &model, double* result, double* error){
+int cubaIntegrateDOS(Model &model, double* result, double* error){
     void* userdata=&model;
     int NDIM=2;                     // const    number of dimensions
     int ncomp=1;                    // const    number of components of the integrand (could be a vector) // here, it is the argument of var result
@@ -42,8 +42,64 @@ void cubaIntegrateDOS(Model &model, double* result, double* error){
     Cuhre(NDIM, ncomp, dosIntegrand, userdata, nvec,
           EPSREL, EPSABS, verbose, MINEVAL, MAXEVAL, KEY, NULL, spin,
           &nregions, &neval, &fail, result, error, prob);
+    return neval;
 }
 
+
+
+int gridIntegrateDOS(Model &model, double* integral, double* error, int verboseIntegrate=1){
+
+    void* userdata=&model;
+    int NDIM=2;                     // const    number of dimensions
+
+    int ncomp=1;
+    double result[1];
+    
+    int grid_nMin = 5;
+    int grid_nMax = 11;
+    
+    int steps = 1 << (grid_nMin - 1);
+    for(int n = 0; n<ncomp; n++) integral[n] = .0;
+
+    double EPSREL=0.001;
+    if (model.EPSREL!=0) EPSREL=model.EPSREL;
+    double EPSABS=0.0001;
+    if (model.EPSABS!=0) EPSABS=model.EPSABS;
+    
+    bool continueFlag=false;
+    do {
+        steps *= 3;	
+        steps /= 2;	
+        for(int n = 0; n<ncomp; n++) error[n] = integral[n]; 
+
+        for(int n = 0; n<ncomp; n++) integral[n] = .0;
+        for(int i = 0; i < steps; i++) 
+           for(int j = 0; j < steps; j++) {
+               double k[] = {((double)i) / ((double)(steps)) , ((double)j) / ((double)(steps))};
+               dosIntegrand(&NDIM, k, &ncomp, result, userdata);
+               for(int n = 0; n<ncomp; n++) integral[n] += result[n];
+           }
+
+        for(int n = 0; n<ncomp; n++) integral[n] /= ((double)(steps*steps)) ;
+
+        continueFlag=false;
+        for(int n = 0; n<ncomp; n++) {
+            error[n] -= integral[n];
+            if(abs(error[n]) > EPSREL*abs(integral[n]) ) {
+                if(abs(error[n]) > EPSABS){
+                    if(steps < (1 << grid_nMax)){
+                        if(n<3) continueFlag=true;  //convergence criterion only check for the first 3 value to integrate here, the one obtained with A^3 and not the integral by part.
+                    }
+                }
+            }
+            
+        }
+        //printf("\n\nsteps=%d", steps);			
+        //for(int n = 0; n<ncomp; n++) printf(", val%d=% 4.3e err%d=% 4.2e", n, integral[n], n, error[n]); 
+    } while(continueFlag);
+    
+    return steps*steps;
+}
 
 typedef struct DOS {
 // Density Of States (DOS). Integral of the spetral weight as a function omega.
@@ -77,9 +133,10 @@ public:
             
             double omega = omega_start + w*(omega_end-omega_start)/(resolution-1);
             model.OMEGA = omega;
-            cubaIntegrateDOS(model, integral, error);
+            int steps_total = cubaIntegrateDOS(model, &integral[0], &error[0]);
             fprintf(file,"% 5.2f  % 8.6f  % 8.6f\n",omega,integral[0],error[0]);
-            printf("% 5.2f  % 8.6f  % 8.6f\n",omega,integral[0],error[0]);
+            printf("% 5.2f  % 8.6f  % 8.6f    % d\n",omega,integral[0],error[0], steps_total);
+            fflush(file);
         }
         fclose(file);
         if(model.verbose >= 1) printf("\rDOS file printed.\n");

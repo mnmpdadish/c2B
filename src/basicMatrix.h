@@ -5,6 +5,7 @@
 extern "C" {
     void zgetrf_(int*, int* , complex<double>*, int*, int*, int*);
     void zgetri_(int*, complex<double>*, int*, int*, complex<double>*, int*, int*);
+    void zgemm_(char*, char*, int*, int*, int*, double*, complex<double>*, int*, complex<double>*, int*, double*, complex<double>*, int*);
 }
 
 typedef struct BasicMatrix {
@@ -76,6 +77,27 @@ public:
             exit( 1 );
         }
     };
+
+    void leftright_MatrixMultiplication(BasicMatrix const * A) {  // data_ = A.data_^dag * data_ * A.data_
+      assert(A->dim == dim);
+      double one=1.0;
+      double zero=0.0;
+      char no = 'n';
+      char ye = 'c';
+      BasicMatrix tmp(dim);
+      
+      //printf("salutyo \n\n");
+      //print();
+      //A->print();
+      zgemm_(&no,&no,&dim,&dim,&dim, &one, A->data_, &dim, data_, &dim, &zero, tmp.data_, &dim); 
+      //tmp.print();
+      zgemm_(&no,&no,&dim,&dim,&dim, &one, tmp.data_, &dim, A->data_, &dim, &zero, data_, &dim); 
+      //print();
+      
+      
+      return;
+    }
+
     
     void print() {
         int i, j;
@@ -89,18 +111,12 @@ public:
     }    
 
 
-private:    
+public: // meh
     int *IPIV_ ;
     complex<double> *WORK_ ;
     complex<double> * data_;      //can be assigned directly
 
 } BasicMatrix;
-
-
-
-
-
-
 
 
 

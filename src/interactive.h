@@ -235,6 +235,15 @@ void interactive_mdc(Model &model, MDC & mdc){
                     if (model.periodization==3) printf("exact           ");
                     fflush(stdout);
                 }
+                
+                else if(c=='m') {
+                    model.model = (model.model+1)%2;
+                    mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
+                    if (model.model==0) printf("model = AFM ");
+                    if (model.model==1) printf("model = YRZ ");
+                    fflush(stdout);
+                }
+
 
                 else if(c=='h') {
                     printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
