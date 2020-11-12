@@ -150,6 +150,22 @@ public:
           dtk4(3,0)=-t*emy;                     dtk(3,1)=0;                        dtk(3,2)=-t*ex;                  dtk(3,3)=0;
 
           if (periodization>=2){
+            //this is for YRZ
+            deltak(0,0)=  M; deltak(0,1)=  0.; deltak(0,2)= 0.; deltak(0,3)= 0.;
+            deltak(1,0)= 0.; deltak(1,1)=  -M; deltak(1,2)= 0.; deltak(1,3)= 0.;
+            deltak(2,0)= 0.; deltak(2,1)=  0.; deltak(2,2)=  M; deltak(2,3)= 0.;
+            deltak(3,0)= 0.; deltak(3,1)=  0.; deltak(3,2)= 0.; deltak(3,3)= -M;
+          
+          }
+          else{
+            //this is for YRZ
+            delta(0,0)=  M; delta(0,1)=  0.; delta(0,2)= 0.; delta(0,3)= 0.;
+            delta(1,0)= 0.; delta(1,1)=  -M; delta(1,2)= 0.; delta(1,3)= 0.;
+            delta(2,0)= 0.; delta(2,1)=  0.; delta(2,2)=  M; delta(2,3)= 0.;
+            delta(3,0)= 0.; delta(3,1)=  0.; delta(3,2)= 0.; delta(3,3)= -M;
+          }
+
+         /* if (periodization>=2){
             deltak(0,0)= 0.;          deltak(0,1)=  M*(1.+ex);   deltak(0,2)= 0.;          deltak(0,3)= -M*(1.+ey);
             deltak(1,0)=  M*(1.+emx); deltak(1,1)= 0.;           deltak(1,2)= -M*(1.+ey);  deltak(1,3)= 0.;
             deltak(2,0)= 0.;          deltak(2,1)= -M*(1.+emy);  deltak(2,2)= 0.;          deltak(2,3)=  M*(1.+emx);
@@ -162,7 +178,7 @@ public:
             delta(1,0)=  M; delta(1,1)= 0.; delta(1,2)= -M; delta(1,3)= 0.;
             delta(2,0)= 0.; delta(2,1)= -M; delta(2,2)= 0.; delta(2,3)=  M;
             delta(3,0)= -M; delta(3,1)= 0.; delta(3,2)=  M; delta(3,3)= 0.;
-          }
+          }*/
         }
         else{
           // e^(i*pi) = -1;
