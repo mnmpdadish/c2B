@@ -80,8 +80,8 @@ public:
 
     void leftright_MatrixMultiplication(BasicMatrix const * A) {  // data_ = A.data_^dag * data_ * A.data_
       assert(A->dim == dim);
-      double one=1.0;
-      double zero=0.0;
+      double one = 1.0;
+      double zero = 0.0;
       char no = 'n';
       char ye = 'c';
       BasicMatrix tmp(dim);
@@ -91,7 +91,7 @@ public:
       //A->print();
       zgemm_(&no,&no,&dim,&dim,&dim, &one, A->data_, &dim, data_, &dim, &zero, tmp.data_, &dim); 
       //tmp.print();
-      zgemm_(&no,&no,&dim,&dim,&dim, &one, tmp.data_, &dim, A->data_, &dim, &zero, data_, &dim); 
+      zgemm_(&no,&ye,&dim,&dim,&dim, &one, tmp.data_, &dim, A->data_, &dim, &zero, data_, &dim); 
       //print();
       
       
