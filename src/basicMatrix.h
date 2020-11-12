@@ -89,9 +89,9 @@ public:
       //printf("salutyo \n\n");
       //print();
       //A->print();
-      zgemm_(&no,&no,&dim,&dim,&dim, &one, A->data_, &dim, data_, &dim, &zero, tmp.data_, &dim); 
       //tmp.print();
-      zgemm_(&no,&ye,&dim,&dim,&dim, &one, tmp.data_, &dim, A->data_, &dim, &zero, data_, &dim); 
+      zgemm_(&ye,&no,&dim,&dim,&dim, &one, A->data_, &dim, data_, &dim, &zero, tmp.data_, &dim); 
+      zgemm_(&no,&no,&dim,&dim,&dim, &one, tmp.data_, &dim, A->data_, &dim, &zero, data_, &dim); 
       //print();
       
       

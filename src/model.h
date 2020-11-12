@@ -144,10 +144,10 @@ public:
 
         if(model==1){//this is for YRZ
           //assignation of the 4 by 4 Hk tk:
-          dtk4(0,0)=0;                          dtk(0,1)=-t*ex;                    dtk(0,2)=-tp*(ex + ey + ex*ey);  dtk(0,3)=-t*ey;
-          dtk4(1,0)=-t*emx;                     dtk(1,1)=0;                        dtk(1,2)=-t*ey;                  dtk(1,3)=-tp*(emx + ey + emx*ey) ;
-          dtk4(2,0)=-tp*(emx + emy + emx*emy);  dtk(2,1)=-t*emy;                   dtk(2,2)=0;                      dtk(2,3)=-t*emx;
-          dtk4(3,0)=-t*emy;                     dtk(3,1)=-tp*(ex + emy + ex*emy);  dtk(3,2)=-t*ex;                  dtk(3,3)=0;
+          dtk4(0,0)=0;                          dtk(0,1)=-t*ex;                    dtk(0,2)=0;                      dtk(0,3)=-t*ey;
+          dtk4(1,0)=-t*emx;                     dtk(1,1)=0;                        dtk(1,2)=-t*ey;                  dtk(1,3)=0;
+          dtk4(2,0)=0;                          dtk(2,1)=-t*emy;                   dtk(2,2)=0;                      dtk(2,3)=-t*emx;
+          dtk4(3,0)=-t*emy;                     dtk(3,1)=0;                        dtk(3,2)=-t*ex;                  dtk(3,3)=0;
 
           if (periodization>=2){
             deltak(0,0)= 0.;          deltak(0,1)=  M*(1.+ex);   deltak(0,2)= 0.;          deltak(0,3)= -M*(1.+ey);
@@ -210,10 +210,9 @@ public:
         for(int i=0;i<sigma.dim;i++)
             for(int j=0;j<sigma.dim;j++)
             {
-                sigma(i,j) = -tc(i,j);
-                if (i==j) sigma(i,j) += z;  
-                if (periodization==2) sigma(i,j) += -dtk4(i,j);
-                if (periodization==3) sigma(i,j) += -dtk(i,j);
+                sigma(i,j) = tc(i,j);
+                if (i==j) sigma(i,j) += z;
+                if (periodization>=2) sigma(i,j) += dtk4(i,j);
             }
 
         sigma.invert();
@@ -225,9 +224,6 @@ public:
         else{ 
           sigma.leftright_MatrixMultiplication(&delta);
         }
-        //sigma.print();
-        //printf("salut \n\n");
-        
     }
 
 
