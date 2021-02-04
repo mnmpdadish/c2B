@@ -225,7 +225,19 @@ void interactive_mdc(Model &model, MDC & mdc){
                 
                 else if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
                 else if(c=='y') { DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model); lineKind(0); printf("dos printed"); fflush(stdout);}
-                else if(c=='t') { mdc.printFile(model);}
+                else if(c=='t') { mdc.printFile(model);}                
+                else if(c=='h') {
+                    printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
+                    printCompact(values,valuesLast);
+                }
+
+                else if(c=='m') {
+                    model.model = (model.model+1)%2;
+                    mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
+                    if (model.model==0) printf("model = AFM ");
+                    if (model.model==1) printf("model = YRZ ");
+                    fflush(stdout);
+                }
                 else if(c=='g') {
                     model.periodization = (model.periodization+1)%4;
                     mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
@@ -235,20 +247,7 @@ void interactive_mdc(Model &model, MDC & mdc){
                     if (model.periodization==3) printf("exact           ");
                     fflush(stdout);
                 }
-                
-                else if(c=='m') {
-                    model.model = (model.model+1)%2;
-                    mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
-                    if (model.model==0) printf("model = AFM ");
-                    if (model.model==1) printf("model = YRZ ");
-                    fflush(stdout);
-                }
 
-
-                else if(c=='h') {
-                    printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
-                    printCompact(values,valuesLast);
-                }
             }
         }
         else if( res < 0 )

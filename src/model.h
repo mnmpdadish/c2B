@@ -47,7 +47,7 @@ public:
         
     //matrices
     BasicMatrix tc;
-    BasicMatrix tc0;
+    BasicMatrix tc4;
     BasicMatrix dtk;
     BasicMatrix tc2;
     BasicMatrix dtk2;
@@ -65,7 +65,7 @@ public:
     
     Model():
     
-    tc(4), tc0(4), dtk(4), tc2(4), dtk2(4), dtk3(4), dtk4(4), green(4), cumul(4), sigma(4), delta(4), deltak(4)
+    tc(4), tc4(4), dtk(4), tc2(4), dtk2(4), dtk3(4), dtk4(4), green(4), cumul(4), sigma(4), delta(4), deltak(4)
 
     {
         if (not exists("para.dat")) {printf("ERROR: couldn't find file 'para.dat'\n\n"); exit(1);}
@@ -131,16 +131,6 @@ public:
         tc(2,0)= -tp; tc(2,1)= -t;  tc(2,2)=  0.; tc(2,3)= -t;
         tc(3,0)= -t;  tc(3,1)= -tp; tc(3,2)= -t;  tc(3,3)=  0.;
 
-        tc2(0,0)=  0.; tc2(0,1)=  t;  tc2(0,2)= -tp; tc2(0,3)=  t;
-        tc2(1,0)=  t;  tc2(1,1)=  0.; tc2(1,2)=  t;  tc2(1,3)= -tp;
-        tc2(2,0)= -tp; tc2(2,1)=  t;  tc2(2,2)=  0.; tc2(2,3)=  t;
-        tc2(3,0)=  t;  tc2(3,1)= -tp; tc2(3,2)=  t;  tc2(3,3)=  0.;
-
-        tc0(0,0)=  0.; tc0(0,1)= -t;  tc0(0,2)=  0.; tc0(0,3)= -t;
-        tc0(1,0)= -t;  tc0(1,1)=  0.; tc0(1,2)= -t;  tc0(1,3)=  0.;
-        tc0(2,0)=  0.; tc0(2,1)= -t;  tc0(2,2)=  0.; tc0(2,3)= -t;
-        tc0(3,0)= -t;  tc0(3,1)=  0.; tc0(3,2)= -t;  tc0(3,3)=  0.;
-
         complex<double> ex(cos(-kx*2.), sin(-kx*2.));
         complex<double> emx = conj(ex);
         complex<double> ey(cos(-ky*2.), sin(-ky*2.));
@@ -153,28 +143,37 @@ public:
         dtk(3,0)=-t*emy;                     dtk(3,1)=-tp*(ex + emy + ex*emy);  dtk(3,2)=-t*ex;                  dtk(3,3)=-tpp*(emx+ex+ey+emy);
 
         if(model==1){//this is for YRZ
-          //assignation of the 4 by 4 Hk tk:
-          dtk4(0,0)=0;                          dtk4(0,1)=-t*ex;                    dtk4(0,2)=0;                      dtk4(0,3)=-t*ey;
-          dtk4(1,0)=-t*emx;                     dtk4(1,1)=0;                        dtk4(1,2)=-t*ey;                  dtk4(1,3)=0;
-          dtk4(2,0)=0;                          dtk4(2,1)=-t*emy;                   dtk4(2,2)=0;                      dtk4(2,3)=-t*emx;
-          dtk4(3,0)=-t*emy;                     dtk4(3,1)=0;                        dtk4(3,2)=-t*ex;                  dtk4(3,3)=0;
+          tc4(0,0)=  0.; tc4(0,1)= -t;  tc4(0,2)=  0.; tc4(0,3)= -t;
+          tc4(1,0)= -t;  tc4(1,1)=  0.; tc4(1,2)= -t;  tc4(1,3)=  0.;
+          tc4(2,0)=  0.; tc4(2,1)= -t;  tc4(2,2)=  0.; tc4(2,3)= -t;
+          tc4(3,0)= -t;  tc4(3,1)=  0.; tc4(3,2)= -t;  tc4(3,3)=  0.;
 
-         if (periodization>=2){
-            deltak(0,0)= 0.;          deltak(0,1)=  M*(1.+ex);   deltak(0,2)= 0.;          deltak(0,3)= -M*(1.+ey);
-            deltak(1,0)=  M*(1.+emx); deltak(1,1)= 0.;           deltak(1,2)= -M*(1.+ey);  deltak(1,3)= 0.;
-            deltak(2,0)= 0.;          deltak(2,1)= -M*(1.+emy);  deltak(2,2)= 0.;          deltak(2,3)=  M*(1.+emx);
-            deltak(3,0)= -M*(1.+emy); deltak(3,1)= 0.;           deltak(3,2)=  M*(1.+ex);  deltak(3,3)= 0.;
+          dtk4(0,0)=0;      dtk4(0,1)=-t*ex;  dtk4(0,2)=0;     dtk4(0,3)=-t*ey;
+          dtk4(1,0)=-t*emx; dtk4(1,1)=0;      dtk4(1,2)=-t*ey; dtk4(1,3)=0;
+          dtk4(2,0)=0;      dtk4(2,1)=-t*emy; dtk4(2,2)=0;     dtk4(2,3)=-t*emx;
+          dtk4(3,0)=-t*emy; dtk4(3,1)=0;      dtk4(3,2)=-t*ex; dtk4(3,3)=0;
+
+          delta(0,0)= 0.; delta(0,1)=  M; delta(0,2)= 0.; delta(0,3)= -M;
+          delta(1,0)=  M; delta(1,1)= 0.; delta(1,2)= -M; delta(1,3)= 0.;
+          delta(2,0)= 0.; delta(2,1)= -M; delta(2,2)= 0.; delta(2,3)=  M;
+          delta(3,0)= -M; delta(3,1)= 0.; delta(3,2)=  M; delta(3,3)= 0.;
           
-          }
-          else{
-            //this is for YRZ
-            delta(0,0)= 0.; delta(0,1)=  M; delta(0,2)= 0.; delta(0,3)= -M;
-            delta(1,0)=  M; delta(1,1)= 0.; delta(1,2)= -M; delta(1,3)= 0.;
-            delta(2,0)= 0.; delta(2,1)= -M; delta(2,2)= 0.; delta(2,3)=  M;
-            delta(3,0)= -M; delta(3,1)= 0.; delta(3,2)=  M; delta(3,3)= 0.;
-          }
+          deltak(0,0)= 0.;          deltak(0,1)=  M*(1.+ex);   deltak(0,2)= 0.;          deltak(0,3)= -M*(1.+ey);
+          deltak(1,0)=  M*(1.+emx); deltak(1,1)= 0.;           deltak(1,2)= -M*(1.+ey);  deltak(1,3)= 0.;
+          deltak(2,0)= 0.;          deltak(2,1)= -M*(1.+emy);  deltak(2,2)= 0.;          deltak(2,3)=  M*(1.+emx);
+          deltak(3,0)= -M*(1.+emy); deltak(3,1)= 0.;           deltak(3,2)=  M*(1.+ex);  deltak(3,3)= 0.;
+
+          // use around mu=-0.825  t= 1.000  tp=-0.240  tpp= 0.125  M= 0.050  w= 0.000  eta= 0.010  
+          // to obtain something similar to Storey 2016
+
         }
         else{
+
+          tc2(0,0)=  0.; tc2(0,1)=  t;  tc2(0,2)= -tp; tc2(0,3)=  t;
+          tc2(1,0)=  t;  tc2(1,1)=  0.; tc2(1,2)=  t;  tc2(1,3)= -tp;
+          tc2(2,0)= -tp; tc2(2,1)=  t;  tc2(2,2)=  0.; tc2(2,3)=  t;
+          tc2(3,0)=  t;  tc2(3,1)= -tp; tc2(3,2)=  t;  tc2(3,3)=  0.;
+
           // e^(i*pi) = -1;
           dtk2(0,0)=-tpp*(emx+ex+ey+emy);      dtk2(0,1)= t*ex;                   dtk2(0,2)=-tp*(ex + ey + ex*ey); dtk2(0,3)= t*ey;
           dtk2(1,0)= t*emx;                    dtk2(1,1)=-tpp*(emx+ex+ey+emy);    dtk2(1,2)= t*ey;                 dtk2(1,3)=-tp*(emx + ey + emx*ey) ;
@@ -220,7 +219,7 @@ public:
         for(int i=0;i<sigma.dim;i++)
             for(int j=0;j<sigma.dim;j++)
             {
-                sigma(i,j) = tc0(i,j);
+                sigma(i,j) = tc4(i,j);
                 if (i==j) sigma(i,j) += z;
                 if (periodization>=2) sigma(i,j) += dtk4(i,j);
             }
@@ -275,12 +274,12 @@ public:
 
         calculate_dtk(px, py);
         if(model==0)
-          calculate_sigma(z); // could be omitted when z doesn't change
+          calculate_sigma(z);
         else
           calculate_sigmaYRZ(z);
         
         if (periodization==1){
-            calculate_cumulant(z); // could be omitted when z doesn't change
+            calculate_cumulant(z);
             M_per = 0;
             for (int ii=0; ii<4; ++ii) {
                 for (int jj=0; jj<4; ++jj) {
