@@ -129,7 +129,8 @@ public:
         fprintf(file," w      dos          err\n");
         printf(      " w      dos          err\n");
         
-       for (int w=0; w<resolution; w++) {
+        //model.model=1;
+        for (int w=0; w<resolution; w++) {
             
             double omega = omega_start + w*(omega_end-omega_start)/(resolution-1);
             model.OMEGA = omega;

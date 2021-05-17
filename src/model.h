@@ -142,21 +142,22 @@ public:
         dtk(2,0)=-tp*(emx + emy + emx*emy);  dtk(2,1)=-t*emy;                   dtk(2,2)=-tpp*(emx+ex+ey+emy);   dtk(2,3)=-t*emx;
         dtk(3,0)=-t*emy;                     dtk(3,1)=-tp*(ex + emy + ex*emy);  dtk(3,2)=-t*ex;                  dtk(3,3)=-tpp*(emx+ex+ey+emy);
 
-        if(model==1){//this is for YRZ
-          tc4(0,0)=  0.; tc4(0,1)= -t;  tc4(0,2)=  0.; tc4(0,3)= -t;
-          tc4(1,0)= -t;  tc4(1,1)=  0.; tc4(1,2)= -t;  tc4(1,3)=  0.;
-          tc4(2,0)=  0.; tc4(2,1)= -t;  tc4(2,2)=  0.; tc4(2,3)= -t;
-          tc4(3,0)= -t;  tc4(3,1)=  0.; tc4(3,2)= -t;  tc4(3,3)=  0.;
+        //if(model==1){//this is for YRZ
+
+          tc4(0,0)=10000; tc4(0,1)=        0.; tc4(0,2)=     0.; tc4(0,3)=  0.;
+          tc4(1,0)=        0.; tc4(1,1)= 10000; tc4(1,2)=     0.; tc4(1,3)=  0.;
+          tc4(2,0)=        0.; tc4(2,1)=        0.; tc4(2,2)= -MU+tp; tc4(2,3)=  0.;
+          tc4(3,0)=        0.; tc4(3,1)=        0.; tc4(3,2)=     0.; tc4(3,3)=  -MU+tp;
 
           dtk4(0,0)=0;      dtk4(0,1)=-t*ex;  dtk4(0,2)=0;     dtk4(0,3)=-t*ey;
           dtk4(1,0)=-t*emx; dtk4(1,1)=0;      dtk4(1,2)=-t*ey; dtk4(1,3)=0;
           dtk4(2,0)=0;      dtk4(2,1)=-t*emy; dtk4(2,2)=0;     dtk4(2,3)=-t*emx;
           dtk4(3,0)=-t*emy; dtk4(3,1)=0;      dtk4(3,2)=-t*ex; dtk4(3,3)=0;
 
-          delta(0,0)= 0.; delta(0,1)=  M; delta(0,2)= 0.; delta(0,3)= -M;
-          delta(1,0)=  M; delta(1,1)= 0.; delta(1,2)= -M; delta(1,3)= 0.;
-          delta(2,0)= 0.; delta(2,1)= -M; delta(2,2)= 0.; delta(2,3)=  M;
-          delta(3,0)= -M; delta(3,1)= 0.; delta(3,2)=  M; delta(3,3)= 0.;
+          delta(0,0)= 0.5*M; delta(0,1)= 0.5*M; delta(0,2)= 0.707106*M; delta(0,3)=         0.;
+          delta(1,0)= 0.5*M; delta(1,1)=-0.5*M; delta(1,2)=         0.; delta(1,3)= 0.707106*M;
+          delta(2,0)= 0.5*M; delta(2,1)= 0.5*M; delta(2,2)=-0.707106*M; delta(2,3)=         0.;
+          delta(3,0)= 0.5*M; delta(3,1)=-0.5*M; delta(3,2)=         0.; delta(3,3)=-0.707106*M;
           
           deltak(0,0)= 0.;          deltak(0,1)=  M*(1.+ex);   deltak(0,2)= 0.;          deltak(0,3)= -M*(1.+ey);
           deltak(1,0)=  M*(1.+emx); deltak(1,1)= 0.;           deltak(1,2)= -M*(1.+ey);  deltak(1,3)= 0.;
@@ -166,8 +167,8 @@ public:
           // use around mu=-0.825  t= 1.000  tp=-0.240  tpp= 0.125  M= 0.050  w= 0.000  eta= 0.010  
           // to obtain something similar to Storey 2016
 
-        }
-        else{
+        //}
+        //else{
 
           tc2(0,0)=  0.; tc2(0,1)=  t;  tc2(0,2)= -tp; tc2(0,3)=  t;
           tc2(1,0)=  t;  tc2(1,1)=  0.; tc2(1,2)=  t;  tc2(1,3)= -tp;
@@ -185,7 +186,7 @@ public:
           dtk3(1,0)= t*emx;                    dtk3(1,1)= 0;                      dtk3(1,2)= t*ey;                 dtk3(1,3)=-tp*(emx + ey + emx*ey) ;
           dtk3(2,0)=-tp*(emx + emy + emx*emy); dtk3(2,1)= t*emy;                  dtk3(2,2)= 0;                    dtk3(2,3)= t*emx;
           dtk3(3,0)= t*emy;                    dtk3(3,1)=-tp*(ex + emy + ex*emy); dtk3(3,2)= t*ex;                 dtk3(3,3)= 0;
-        }
+        //}
     };
     
     //*
@@ -219,11 +220,10 @@ public:
         for(int i=0;i<sigma.dim;i++)
             for(int j=0;j<sigma.dim;j++)
             {
-                sigma(i,j) = tc4(i,j);
+                sigma(i,j) = -tc4(i,j);
                 if (i==j) sigma(i,j) += z;
                 if (periodization>=2) sigma(i,j) += dtk4(i,j);
             }
-
         sigma.invert();
         //deltak.print();
         //delta.print();
@@ -233,6 +233,7 @@ public:
         else{ 
           sigma.leftright_MatrixMultiplication(&delta);
         }
+        //sigma.print();
     }
 
 

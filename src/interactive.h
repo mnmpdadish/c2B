@@ -235,7 +235,7 @@ void interactive_mdc(Model &model, MDC & mdc){
                     model.model = (model.model+1)%2;
                     mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
                     if (model.model==0) printf("model = AFM ");
-                    if (model.model==1) printf("model = YRZ ");
+                    if (model.model==1) printf("model = ONE ");
                     fflush(stdout);
                 }
                 else if(c=='g') {

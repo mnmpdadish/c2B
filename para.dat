@@ -2,13 +2,13 @@
 #you can comment para.dat using '#'
 
 #hamiltonian parameters:
-ETA   0.01
-MU    -0.5
+ETA   0.005
+MU    -0.85
 OMEGA 0
 t     1
 tp   -0.3
 tpp   0.2
-M     1.0
+M     1.1
 D     0.0
 periodization 0
 
@@ -21,9 +21,9 @@ VERBOSE 0
 
 
 #DOS loop parameters:
-nOmega   2001
-omegaMin -10.
-omegaMax 10.
+nOmega   501
+omegaMin -2.
+omegaMax 2.
 
 
 #density loop parameters:
