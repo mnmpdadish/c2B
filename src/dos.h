@@ -1,4 +1,12 @@
+//
+//  dos.h
+//  c2B
+//
+
 #pragma once
+
+#ifdef CUBA
+        
 #include "cuba.h"
 #include "model.h"
 #include "utilities.h"
@@ -47,7 +55,7 @@ int cubaIntegrateDOS(Model &model, double* result, double* error){
 
 
 
-int gridIntegrateDOS(Model &model, double* integral, double* error, int verboseIntegrate=1){
+int gridIntegrateDOS(Model &model, double* integral, double* error){
 
     void* userdata=&model;
     int NDIM=2;                     // const    number of dimensions
@@ -146,4 +154,6 @@ public:
     }
 
 } DOS;
+
+#endif
 

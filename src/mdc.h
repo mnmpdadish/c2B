@@ -38,13 +38,13 @@ public:
         calculate(model);
         char filename[100];
         if (model.periodization == 0) {
-            sprintf(filename, "mdc_pG_eta%5.3f_omega%5.3f.dat", model.ETA, model.OMEGA);
+            sprintf(filename, "mdc_pG_eta%5.3f_mu%5.3f.dat", model.ETA, model.OMEGA);
         } else if (model.periodization == 1) {
-            sprintf(filename, "mdc_pM_eta%5.3f_omega%5.3f.dat", model.ETA, model.OMEGA);
+            sprintf(filename, "mdc_pM_eta%5.3f_mu%5.3f.dat", model.ETA, model.OMEGA);
         } else if (model.periodization == 2) {
-            sprintf(filename, "mdc_pC_eta%5.3f_omega%5.3f.dat", model.ETA, model.OMEGA);
+            sprintf(filename, "mdc_pC_eta%5.3f_mu%5.3f.dat", model.ETA, model.OMEGA);
         } else {
-            sprintf(filename, "mdc_eta%5.3f_omega%5.3f.dat", model.ETA, model.OMEGA);
+            sprintf(filename, "mdc_eta%5.3f_mu%5.3f.dat", model.ETA, model.OMEGA);
         }
         FILE *file = fopen(filename, "w");
         for (int py=0; py<dimension; ++py) {

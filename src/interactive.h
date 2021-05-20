@@ -1,6 +1,6 @@
 //
 //  interactive.h
-//  OneBuddy
+//  c2B
 //
 
 #pragma once
@@ -30,13 +30,8 @@ void lineKind(int val) {
 }
 
 void plotMDC(MDC &mdc, FILE *hImage=NULL){
-    int Nx=mdc.dimension;
-    
-    //if(p.mdc==0) {
+    int Nx=mdc.dimension;    
     gpc_plot_image(hImage,mdc.mdc_data,Nx,Nx,0.0,6.0,0,0); 
-    //}
-    //else if(p.mdc==1) {gpc_plot_image(hImage,p.gor_data_re,Nx,Ny,-4.0,4.0,p.mdc,p.mdcFlip); }
-    //else if(p.mdc==2) {gpc_plot_image(hImage,p.gor_data_im,Nx,Ny,-4.0,4.0,p.mdc,p.mdcFlip); }
 }
 
 
@@ -46,8 +41,8 @@ void plotMDC(MDC &mdc, FILE *hImage=NULL){
 #define KGRN  "\x1B[32m"
 #define KBOLD "\033[1m"
 
-inline void chooseColor(float val1,float val2, bool bold=false){
-    float tol =0.00001;
+inline void chooseColor(float val1,float val2){
+    float tol = 0.00001;
     if(val1-val2<-tol){printf(KRED);}
     else if(val1-val2>tol){printf(KGRN);}
     else {printf(KNRM);}
@@ -58,9 +53,9 @@ inline void chooseColor(float val1,float val2, bool bold=false){
 // an alternative way to access parameters (not the best patch).
 void extractValues(Model & model, vector<double> &values){
     values.resize(8);
-    values[0] = model.MU;  values[6] = model.OMEGA;  values[7] = model.ETA;
+    values[0] = model.MU;  values[5] = model.OMEGA;  values[6] = model.ETA;
     values[1] = model.t;   values[2] = model.tp;     values[3] = model.tpp;
-    values[4] = model.M;   values[5] = model.D;
+    values[4] = model.M;
     return;
 }
 
@@ -71,29 +66,23 @@ void setValues(Model & model, int param, double value){
     if(param==2) model.tp =value;
     if(param==3) model.tpp=value;
     if(param==4) model.M  =value;
-    if(param==5) model.D  =value;
-    if(param==6) model.OMEGA=value;
-    if(param==7) model.ETA=value;
+    if(param==5) model.OMEGA=value;
+    if(param==6) model.ETA=value;
     return;
 }
-//
-
-    
 
 inline void printCompact(vector<double> &values, vector<double> &valuesLast, int lastUpdate=0){   
         
     lineKind(1);
-    string parameterNames[8] = {"mu","t","tp","tpp","M","D","w","eta"};
+    string parameterNames[8] = {"mu","t","tp","tpp","M","w","eta"};
     
     char tab[1024];
-    for (int i=0;i< 8; i++){
-        #ifndef SUPRA
-        if(i == 5) continue;
-        #endif
+    for (int i=0;i< 7; i++){
         strcpy(tab, parameterNames[i].c_str());
         if(lastUpdate==i) printf(KBOLD);
         chooseColor(values[i],valuesLast[i]);
         printf("%s=% 5.3f  ",tab,values[i]);  
+        if(i==3) printf("   ");  
         printf(KNRM);
     }
     chooseColor(0.0,0.0);
@@ -135,28 +124,28 @@ inline void prepareTerminalInputs()
 
 void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increaseParamKeys[])
 {
-    printf("\n\n----------------- oneBody Interactive Mode Help ------------------\n");
+    printf("\n----------------- oneBody Interactive Mode Help ------------------\n");
     printf("Keyboard commands:\n");
     printf("\tctrl-c  - EXIT the program \n");
     printf("\tSPACE   - compute and plot mdc for selected paramters \n");
     printf("\t+ -     - change resolution \n"); 
     printf("\t) (     - change steps \n");
     printf("\tt       - save mdc file \n");
+    #ifdef CUBA
     printf("\ty       - compute and save dos file \n");
-    printf("\tg       - toggle periodization \n");
-    printf("\th       - print help \n\n");
+    #endif
+    printf("\tg       - switch between the four different periodizations \n");
+    printf("\th       - print this help \n\n");
     printf("Resolution = %d by %d\n",mdc.dimension,mdc.dimension);
     printf("Step =% 1.2f\n",step);
     printf("Controlling keys and corresponding parameters\n");
 
-    string parameterNames[8] = {"mu","t","tp","tpp","M","w","eta","D"};
-    for(int key=0;key<8;key++)
+    string parameterNames[7] = {"mu","t","tp","tpp","M","w","eta"};
+    for(int key=0;key<7;key++)
     {  
-       #ifndef SUPRA
-       if(key==5) continue;
-       #endif
        printf("%s%s%c%s%c       ",KBOLD,KRED,decreaseParamKeys[key],KGRN,increaseParamKeys[key]);
        for(unsigned int l=0; l<parameterNames[key].length(); l++) printf(" ");  // fill space with the parameter lenght name
+       if(key==3) printf("   ");  
     }
     printf("%s\n",KNRM);
 }
@@ -179,12 +168,44 @@ void interactive_mdc(Model &model, MDC & mdc){
     
     float step=0.05;
     
+    printf("Interactive Mode\n");
+    printf("resolution = %d by %d\n",mdc.dimension,mdc.dimension);
+    printf("step =% 1.2f\n\n",step);
+    
+#ifdef AZERTY
+    
+    char increaseParamKeys[] =  { 'a', 'z', 'e', 'r', 'u', 'i', 'o', 'p', '\0' };
+    char decreaseParamKeys[] =  { 'q', 's', 'd', 'f', 'j', 'k', 'l', 'm', '\0' };
+    
+    printf ("Give the focus to your terminal and use your keyboard keys.\n");
+    printf ("Here is a simple representation of the useful keys on a \n");
+    printf ("%sAZERTY keyboard%s:\n\n",KBOLD,KNRM);
+    printf ("....(-....)+\n");
+    printf ("%s%sazer%sty%s%suio%s...\n",KBOLD,KGRN,KNRM,KBOLD,KGRN,KNRM);
+    printf ("%s%sqsdf%sgh%s%sjkl%s...\n",KBOLD,KRED,KNRM,KBOLD,KRED,KNRM);
+    printf ("............\n");
+    printf (".[ SPACE ]..\n\n");
+    printf ("See help below to learn the effect of each key.\n\n");
+    fflush(stdout);
+
+#else    
+
     char increaseParamKeys[] =  { 'q', 'w', 'e', 'r', 'u', 'i', 'o', 'p', '\0' };
     char decreaseParamKeys[] =  { 'a', 's', 'd', 'f', 'j', 'k', 'l', ';', '\0' };
     
-    printf("Interactive Mode\n");
-    printf("resolution = %d by %d\n",mdc.dimension,mdc.dimension);
-    printf("step =% 1.2f\n",step);
+    printf ("Give the focus to your terminal and use your keyboard keys.\n");
+    printf ("Here is a simple representation of the useful keys on a \n");
+    printf ("%sQWERTY keyboard%s:\n\n",KBOLD,KNRM);
+    printf ("........()-+\n");
+    printf ("%s%sqwer%sty%s%suio%s...\n",KBOLD,KGRN,KNRM,KBOLD,KGRN,KNRM);
+    printf ("%s%sasdf%sgh%s%sjkl%s...\n",KBOLD,KRED,KNRM,KBOLD,KRED,KNRM);
+    printf ("............\n");
+    printf (".[ SPACE ]..\n\n");
+    printf ("See help below to learn the effect of each key.\n\n");
+    fflush(stdout);
+
+#endif
+    
     //printf("Type 'h' for help. Controllable parameters are : \n");
     //printCompact(values,valuesLast);
     printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
@@ -211,7 +232,7 @@ void interactive_mdc(Model &model, MDC & mdc){
             char ch[2561];
             if (read( fileno( stdin ), &ch, 2561 )==1){
                 c=ch[0];
-                for(int key=0;key<8;key++)
+                for(int key=0;key<7;key++)
                 {
                          if(c==increaseParamKeys[key]) {updateAmplitude(model, key, +step,values,valuesLast,key);}
                     else if(c==decreaseParamKeys[key]) {updateAmplitude(model, key, -step,values,valuesLast,key);}
@@ -224,26 +245,20 @@ void interactive_mdc(Model &model, MDC & mdc){
                 else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
                 
                 else if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
+                #ifdef CUBA
                 else if(c=='y') { DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model); lineKind(0); printf("dos printed"); fflush(stdout);}
+                #endif
                 else if(c=='t') { mdc.printFile(model);}                
                 else if(c=='h') {
                     printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
                     printCompact(values,valuesLast);
-                }
-
-                else if(c=='m') {
-                    model.model = (model.model+1)%2;
-                    mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
-                    if (model.model==0) printf("model = AFM ");
-                    if (model.model==1) printf("model = ONE ");
-                    fflush(stdout);
                 }
                 else if(c=='g') {
                     model.periodization = (model.periodization+1)%4;
                     mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
                     if (model.periodization==0) printf("G periodization ");
                     if (model.periodization==1) printf("M periodization ");
-                    if (model.periodization==2) printf("Compact assembly");
+                    if (model.periodization==2) printf("compact tiling");
                     if (model.periodization==3) printf("exact           ");
                     fflush(stdout);
                 }

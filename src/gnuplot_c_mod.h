@@ -1,25 +1,30 @@
+//
+//  gnuplot_c_mod.h
+//  c2B
+//
+
 #pragma once
 
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#ifdef __APPLE__
-    #define _TERMINAL "qt"
-#else
+#ifdef  WXT
     #define _TERMINAL "wxt"
+#elif X11
+    #define _TERMINAL "x11"
+#else 
+    #define _TERMINAL "qt"
 #endif
 
 FILE *gpc_init_image ()
 {
 	FILE *pipe;
 	
-  pipe = popen ("gnuplot > /dev/null 2>&1", "w");                  // Open pipe to Gnuplot and check for error
-  if (pipe == NULL)
-  {
-    printf ("Can not find the required Gnuplot executable.\n");
-    printf ("\nGraph creation failure\n");
-    exit (1);
-  }
+  printf ("\nFor the interactive version, please make sure that\n");
+  printf ("Gnuplot is installed on your system and the right gnuplot.\n");
+  printf ("terminal is selected. See README and 'makefile' for details.\n\n");
+  
+  pipe = popen ("gnuplot > /dev/null 2>&1", "w");  // Open pipe to Gnuplot and check for error
   
   //fprintf (pipe, "set term %s\n", _TERMINAL); // Set the plot
   fflush (pipe);                                    // flush the pipe
@@ -42,8 +47,6 @@ int gpc_plot_image (FILE *pipe,vector<double> pData, int Nx, int Ny, float zMin=
 
   
   fprintf(pipe, "unset label {1}\n set label 1 \"%s\" at %f,%f \n",title,Nx*0.46,Ny*1.05);
-//  printf("set label \"%s\" at %f,%f \n",title,Nx*0.46,Ny*1.05);
-  
   
   if(type==0) {
       fprintf (pipe, "set palette defined (0 'white',0.002 '#dddddd',0.2 '#8db0fe',0.5 '#3b4cc0',2 '#f49a7b',4 '#b40426')\n");
@@ -62,22 +65,22 @@ int gpc_plot_image (FILE *pipe,vector<double> pData, int Nx, int Ny, float zMin=
   fprintf (pipe, "Nx=%d\nNy=%d\nset xrange [-0.5:Nx-0.5]\nset yrange [-0.5:Ny-0.5]\n",Nx,Ny);
   fprintf (pipe, "plot '-' matrix with image\n"); // Set plot format
 
-  for (j = 0; j < Ny; j++)                 // For every row
+  for (j = 0; j < Ny; j++)    
   {
-    for (i = 0; i < Nx; i++)               // For every pixel in the row
+    for (i = 0; i < Nx; i++)  
     {
       if(flip){fprintf (pipe, "%f ", pData[i + (j*Ny)]);}
       else{    fprintf (pipe, "%f ", pData[(i* Ny) + j]);}
     }
-    fprintf (pipe, "\n");                           // End of isoline scan
+    fprintf (pipe, "\n");     // End of isoline scan
   }
-  fprintf (pipe, "\ne\ne\n");                       // End of spectrogram dataset
-    fflush (pipe);                                    // Flush the pipe
+  fprintf (pipe, "\ne\ne\n"); // End of dataset
+  fflush (pipe);            
   return (0);
 }
 
 void gpc_close (FILE *pipe)
 {
-  fprintf (pipe, "exit\n");                         // Close GNUPlot
-  pclose (pipe);                                    // Close the pipe to Gnuplot
+  fprintf (pipe, "exit\n");   // Close GNUPlot
+  pclose (pipe);              // Close the pipe to Gnuplot
 }

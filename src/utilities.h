@@ -1,6 +1,6 @@
 //
-//  Utilities.h
-//  oneBuddy
+//  utilities.h
+//  c2B
 //
 
 #pragma once
