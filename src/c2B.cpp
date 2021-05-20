@@ -34,12 +34,23 @@ int main(int argc, const char * argv[]) {
     if(argc>=2){
 		  string opt(argv[1]);
         if      (opt=="mdc") {Model model; MDC mdc(200); mdc.printFile(model);}
-        #ifdef CUBA
-        else if (opt=="dos") {Model model; DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model);}
-        #endif
-        #ifdef INTERACTIVE
-        else if (opt=="i") {Model model; MDC mdc(200); interactive_mdc(model, mdc);}
-        #endif
+        else if (opt=="dos") {
+#ifdef CUBA
+          Model model; DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model);
+#else
+          printf("\n\nPlease compile with option -DCUBA and make sure you have\n");
+          printf("the integration library Cuba installed. See README for more information.\n");
+#endif
+        }
+        
+        else if (opt=="i") {
+#ifdef INTERACTIVE
+          Model model; MDC mdc(200); interactive_mdc(model, mdc);
+#else
+          printf("\n\nPlease compile with option -DINTERACTIVE and make sure you have\n");
+          printf("Gnuplot 5 or above installed. See README for more information.\n");
+#endif
+        }
         else printHelp();
     } else {
         printHelp();

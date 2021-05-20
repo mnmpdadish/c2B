@@ -33,18 +33,20 @@ public:
         }
     }
     
-    void printFile(Model &model)
+    void printFile(Model &model, bool default_name=true)
     {
         calculate(model);
         char filename[100];
-        if (model.periodization == 0) {
-            sprintf(filename, "mdc_pG_eta%5.3f_mu%5.3f.dat", model.ETA, model.OMEGA);
+        if (default_name){
+            sprintf(filename, "mdc.dat");
+        } else if (model.periodization == 0) {
+            sprintf(filename, "mdc_pG_eta%5.3f_mu%5.3f.dat", model.ETA, model.MU);
         } else if (model.periodization == 1) {
-            sprintf(filename, "mdc_pM_eta%5.3f_mu%5.3f.dat", model.ETA, model.OMEGA);
+            sprintf(filename, "mdc_pM_eta%5.3f_mu%5.3f.dat", model.ETA, model.MU);
         } else if (model.periodization == 2) {
-            sprintf(filename, "mdc_pC_eta%5.3f_mu%5.3f.dat", model.ETA, model.OMEGA);
+            sprintf(filename, "mdc_pC_eta%5.3f_mu%5.3f.dat", model.ETA, model.MU);
         } else {
-            sprintf(filename, "mdc_eta%5.3f_mu%5.3f.dat", model.ETA, model.OMEGA);
+            sprintf(filename, "mdc_eta%5.3f_mu%5.3f.dat", model.ETA, model.MU);
         }
         FILE *file = fopen(filename, "w");
         for (int py=0; py<dimension; ++py) {

@@ -28,9 +28,9 @@ static int dosIntegrand(const int* ndim, const double x[],
 
 int cubaIntegrateDOS(Model &model, double* result, double* error){
     void* userdata=&model;
-    int NDIM=2;                     // const    number of dimensions
-    int ncomp=1;                    // const    number of components of the integrand (could be a vector) // here, it is the argument of var result
-    int nvec=1;                     // const    number of samples passed to integrand; usually 1 (here it can be larger than the one passed to the Integrand.. why? no one knows)
+    int NDIM=2;                     // number of dimensions
+    int ncomp=1;                    // number of components of the integrand (could be a vector) // here, it is the argument of var result
+    int nvec=1;                     // number of samples passed to integrand; usually 1 (here it can be larger than the one passed to the Integrand.. why? no one knows)
     double EPSREL=0.001;
     if (model.EPSREL!=0) EPSREL=model.EPSREL;
     double EPSABS=0.0001;
@@ -58,7 +58,7 @@ int cubaIntegrateDOS(Model &model, double* result, double* error){
 int gridIntegrateDOS(Model &model, double* integral, double* error){
 
     void* userdata=&model;
-    int NDIM=2;                     // const    number of dimensions
+    int NDIM=2;                     // number of dimensions
 
     int ncomp=1;
     double result[1];
@@ -134,9 +134,8 @@ public:
         double omegaOrig=model.OMEGA;
         
         FILE *file = fopen("dos.out","w");
-        fprintf(file," w      dos          err\n");
-        printf(      " w      dos          err\n");
-        
+        fprintf(file," w      dos        err\n");
+        printf(      " w      dos        err          NB_EVAL\n");
         //model.model=1;
         for (int w=0; w<resolution; w++) {
             

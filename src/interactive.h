@@ -248,7 +248,7 @@ void interactive_mdc(Model &model, MDC & mdc){
                 #ifdef CUBA
                 else if(c=='y') { DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model); lineKind(0); printf("dos printed"); fflush(stdout);}
                 #endif
-                else if(c=='t') { mdc.printFile(model);}                
+                else if(c=='t') { mdc.printFile(model, false);}                
                 else if(c=='h') {
                     printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
                     printCompact(values,valuesLast);
