@@ -6,7 +6,7 @@ This directory contains the para.dat necessary to reproduce the c2B results
 in figure 1 of the article. Results that you should obtain running the
 programme are contained in the "results" directory.
 
-$ oneBody mdc
+$ c2B mdc
 
 to produce the "mdc.dat" file. 
 
@@ -18,7 +18,7 @@ gnuplot> plot 'mdc.dat' matrix with image
 The user can also run an interactive version of the code, to visualize via gnuplot the Fermi
 surface as a function of the parameters with the command:
 
-$ oneBody i
+$ c2B i
 
 Cycle through the different Fermi surfaces by pressing 'g' in the ineractive mode. This
 reproduce the Fig 1e,d,f,c respectivly. If you want to obtain the same results with the

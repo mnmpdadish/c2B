@@ -12,6 +12,7 @@ MAIN REPOSITORY:
 
 To get the most recent version of the source code on this project,
 in command line on a bash terminal (represented here with the "$" sign), type:
+
 $ git clone https://github.com/mnmpdadish/c2B.git
 
 
@@ -24,7 +25,7 @@ root directory:
 
 $ make
 
-This very simple makefile should work on Linux and Mac. 
+This makefile should work on Linux and Mac.
 
 
 #############
@@ -36,13 +37,13 @@ gfortran: Tested with version 4.6.4. Must be recent enough.
 
 Lapack: Tested with version 3.5.0. Must be recent enough.
 
-Gnuplot: Any version of gnuplot should be enough to run the interactive
-         version of the program properly, "$ ./c2B i" but the code was 
-         developped using version 5.0. If gnuplot is not installed, the 
+Gnuplot: In principle Any version of gnuplot should be enough to run the 
+         interactive version of the program properly, "$ ./c2B i" but the code 
+         was developped using only version 5.0. If gnuplot is not installed, the 
          interactive version will not work. 
 
          Troubleshooting:
-         - If the interactive task stop, install a compatible version of Gnuplot
+         - If the interactive task stop, try to install Gnuplot 5.0
          - If the program does not stop but no gnuplot graph appears,
            make sure you have the right terminal. By default, QT is used,
            but you can also choose x11 or wxt. Check which terminal is use by default
@@ -68,13 +69,14 @@ Any other task than the help needs a "para.dat" file that specify the model
 parameters. An example of a "para.dat" file is contained in the "example" 
 directory. The "para.dat" file can contain the following parameters:
 
-ETA    Lorentzian broadening of the spectral weight
-OMEGA  frequency (OMEGA=0 is the Fermi level)
-MU     chemical potential
-t      nearest neighbor hopping energy
-tp     second nearest neighbor hopping energy
-tpp    third nearest neighbor hopping energy
-DELTA  coupling energy
+ETA            Lorentzian broadening of the spectral weight
+OMEGA          frequency (OMEGA=0 is the Fermi level)
+MU             chemical potential
+t              nearest neighbor hopping energy
+tp             second nearest neighbor hopping energy
+tpp            third nearest neighbor hopping energy
+DELTA          coupling energy
+periodization  choice of periodization (0=green, 1=cumulant, 2=compact tiling, 3=exact)
 
 VERBOSE  level of verbose of the program
 EPSREL   relative error demanded
@@ -82,9 +84,13 @@ EPSABS   absolute error demanded
 MAXEVAL  maximum number of evaluations
 MINEVAL  minimum number of evaluations
 
+nOmega    number of frequency to calculate for the DOS
+omegaMin  minimum frequency to calculate for the DOS
+omegaMax  maximum frequency to calculate for the DOS
+
 If any of these parameters are not found, default parameters will be used 
-(and printed on the screen). The programme "c2B" should be run in the
-directory where the file "para.dat" is.
+(and printed on the screen). A file "para.dat" must be present in the 
+directory where the programme "c2B" is called. 
 
 
 #########
@@ -101,7 +107,7 @@ article.
 USAGE:
 
 This software is released under MIT License (see LICENSE file). Please consider citing
-this code and the associated arxiv and PRL article if you reuse this code for
+this code and the associated arxiv and Physical Review article if you reuse this code for
 your own research.
 
 

@@ -16,10 +16,8 @@ using namespace std;
 
 void printHelp(){
     printf("\nDifferent ways to use 'oneBody':\n\n");
-    #ifdef INTERACTIVE
     printf("$ ./c2B i\n");
     printf("  Launch interactive plotting version.\n\n");
-    #endif
     printf("$ ./c2B mdc\n");
     printf("  Print mdc.out file. (output = 'mdc.dat')\n");
     printf("  Plot in gnuplot with:\n");
@@ -39,18 +37,11 @@ int main(int argc, const char * argv[]) {
           Model model; DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model);
 #else
           printf("\n\nPlease compile with option -DCUBA and make sure you have\n");
-          printf("the integration library Cuba installed. See README for more information.\n");
+          printf("the integration library Cuba installed. Add -lcuba to the LINK. \n");
+          printf("See README for more information.\n");
 #endif
         }
-        
-        else if (opt=="i") {
-#ifdef INTERACTIVE
-          Model model; MDC mdc(200); interactive_mdc(model, mdc);
-#else
-          printf("\n\nPlease compile with option -DINTERACTIVE and make sure you have\n");
-          printf("Gnuplot 5 or above installed. See README for more information.\n");
-#endif
-        }
+        else if (opt=="i") {Model model; MDC mdc(200); interactive_mdc(model, mdc);}
         else printHelp();
     } else {
         printHelp();

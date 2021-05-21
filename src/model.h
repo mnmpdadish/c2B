@@ -38,8 +38,9 @@ public:
     int nOmega=200;
     double omegaMin=-4.0;
     double omegaMax=4.0;
-        
+    
     //matrices
+    int rien;
     BasicMatrix tc;
     BasicMatrix tc2;  // used only for exact lattice and compact tiling
     BasicMatrix dtk;  
@@ -59,7 +60,7 @@ public:
         ifstream file;
         file.open("para.dat");
         
-        //tk parameters:
+        //model parameters:
         readNumber(file,"MU",MU); 
         readNumber(file,"ETA",ETA);
         readNumber(file,"OMEGA",OMEGA);
@@ -76,6 +77,7 @@ public:
         readNumber(file,"MINEVAL",MINEVAL);
         readNumber(file,"VERBOSE",VERBOSE);
         
+        //dos parameters:
         readNumber(file,"nOmega",nOmega);
         readNumber(file,"omegaMin",omegaMin);
         readNumber(file,"omegaMax",omegaMax);

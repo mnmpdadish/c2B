@@ -5,7 +5,6 @@
 
 #pragma once
 
-#ifdef INTERACTIVE 
 // part used by stdin (keyboard capture)
 #include <stdio.h>
 #include <stdlib.h>
@@ -124,7 +123,7 @@ inline void prepareTerminalInputs()
 
 void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increaseParamKeys[])
 {
-    printf("\n----------------- oneBody Interactive Mode Help ------------------\n");
+    printf("\n----------------- c2B Interactive Mode Help ------------------\n");
     printf("Keyboard commands:\n");
     printf("\tctrl-c  - EXIT the program \n");
     printf("\tSPACE   - compute and plot mdc for selected paramters \n");
@@ -134,7 +133,7 @@ void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increasePa
     #ifdef CUBA
     printf("\ty       - compute and save dos file \n");
     #endif
-    printf("\tg       - switch between the four different periodizations \n");
+    printf("\tg       - switch between the different 'periodizations' \n");
     printf("\th       - print this help \n\n");
     printf("Resolution = %d by %d\n",mdc.dimension,mdc.dimension);
     printf("Step =% 1.2f\n",step);
@@ -142,7 +141,7 @@ void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increasePa
 
     string parameterNames[7] = {"mu","t","tp","tpp","delta","w","eta"};
     for(int key=0;key<7;key++)
-    {  
+    {
        printf("%s%s%c%s%c       ",KBOLD,KRED,decreaseParamKeys[key],KGRN,increaseParamKeys[key]);
        for(unsigned int l=0; l<parameterNames[key].length(); l++) printf(" ");  // fill space with the parameter lenght name
        if(key==3) printf("   ");  
@@ -277,4 +276,3 @@ void interactive_mdc(Model &model, MDC & mdc){
 }
 
 
-#endif

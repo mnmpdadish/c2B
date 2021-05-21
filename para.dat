@@ -18,7 +18,6 @@ MAXEVAL 400000
 MINEVAL 2000
 VERBOSE 0
 
-
 #DOS loop parameters:
 nOmega   501
 omegaMin -2.

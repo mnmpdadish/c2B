@@ -1,18 +1,17 @@
 
 COMPILER := gcc
-#MKL := /opt/intel/mkl/lib/intel64  #only to compile with MKL
-#LINK := -lcuba -lstdc++  ${MKL}/libmkl_intel_lp64.a -Wl,--start-group $(MKL)/libmkl_blas95_lp64.a $(MKL)/libmkl_lapack95_lp64.a $(MKL)/libmkl_sequential.a ${MKL}/libmkl_core.a -Wl,--end-group  -lgomp -lpthread -lm -ldl
- 
-LINK := -lcuba -llapack -lblas -lm -lstdc++   
 
-#OPTIONS := -Wall -Wpedantic -Wextra -Wshadow -std=c++11 -DINTERACTIVE -O2 -DWXT -DCUBA
-OPTIONS := -Wall -Wpedantic -Wextra -Wshadow -std=c++11 -DINTERACTIVE -O2 -DQT
+LINK := -llapack -lblas -lm -lstdc++ #-lcuba 
+
+OPTIONS := -Wall -std=c++11 -O2 #-DCUBA
 # other possibles options:
 #  -DWXT : use wxt terminal for gnuplot
 #  -DX11 : use x11 termianl for gnuplot
-#  -DQT  : use qt  terminal for gnuplot
+#        without these two flags, default terminal is 'qt')
 #
-#  -DCUBA : to compile with cuba library (necessary for the dos task), must have Cuba installed.
+#  -DCUBA : to compile with cuba library (necessary for the dos task).
+#           Cuba must installed and '-lcuba' should be added to 
+#           the LINK variable in the makefile.
 #
 #  -DAZERTY : to use the azerty keyboard layout 
 

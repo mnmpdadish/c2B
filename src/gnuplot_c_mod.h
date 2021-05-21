@@ -13,16 +13,16 @@
 #elif X11
     #define _TERMINAL "x11"
 #else 
-    #define _TERMINAL "qt"
+    #define _TERMINAL "qt" // default terminal
 #endif
 
 FILE *gpc_init_image ()
 {
 	FILE *pipe;
 	
-  printf ("\nFor the interactive version, please make sure that\n");
-  printf ("Gnuplot is installed on your system and the right gnuplot.\n");
-  printf ("terminal is selected. See README and 'makefile' for details.\n\n");
+  printf ("\nIf the program stop here, please make sure that\n");
+  printf ("gnuplot is installed on your system and the right terminal\n");
+  printf ("in gnuplot is selected. See README and 'makefile' for details.\n\n");
   
   pipe = popen ("gnuplot > /dev/null 2>&1", "w");  // Open pipe to Gnuplot and check for error
   
