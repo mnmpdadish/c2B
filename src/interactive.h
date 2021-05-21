@@ -258,7 +258,7 @@ void interactive_mdc(Model &model, MDC & mdc){
                     mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
                     if (model.periodization==0) printf("G periodization ");
                     if (model.periodization==1) printf("M periodization ");
-                    if (model.periodization==2) printf("compact tiling");
+                    if (model.periodization==2) printf("compact tiling  ");
                     if (model.periodization==3) printf("exact           ");
                     fflush(stdout);
                 }

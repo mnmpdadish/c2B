@@ -5,4 +5,5 @@ example/mdc.dat
 ./mdc.dat
 *.out
 *.tar.gz
+src/tmp.h
 

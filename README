@@ -90,8 +90,11 @@ directory where the file "para.dat" is.
 #########
 EXAMPLES:
 
-Examples of results files are found in the "example" directory. Informations 
-on how to reproduce these results by running the code are found in "example/README".
+Examples of input and results files are found in the "fig1" and "fig2"
+directories. Informations on how to reproduce these results by running 
+the code are found in the "README" of each directory. As the name suggest,
+these parameter files create the results shown in Fig. 1 and 2 of the 
+article.
 
 
 ######

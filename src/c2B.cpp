@@ -25,7 +25,7 @@ void printHelp(){
     printf("  Plot in gnuplot with:\n");
     printf("  gnuplot> plot 'mdc.dat' matrix with image\n\n");
     printf("$ ./c2B dos\n");
-    printf("  Print dos.out file. (output = 'dos.dat')\n");
+    printf("  Print dos.dat file. (output = 'dos.dat')\n");
     printf("  Plot in gnuplot with:\n");
     printf("  gnuplot> plot 'dos.dat' u 1:2\n\n");
 }

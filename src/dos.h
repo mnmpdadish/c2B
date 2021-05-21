@@ -133,7 +133,7 @@ public:
         double error[1];
         double omegaOrig=model.OMEGA;
         
-        FILE *file = fopen("dos.out","w");
+        FILE *file = fopen("dos.dat","w");
         fprintf(file," w      dos        err\n");
         printf(      " w      dos        err          NB_EVAL\n");
         //model.model=1;
