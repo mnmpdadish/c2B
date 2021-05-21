@@ -12,6 +12,8 @@ OPTIONS := -Wall -Wpedantic -Wextra -Wshadow -std=c++11 -DINTERACTIVE -O2 -DQT
 #  -DX11 : use x11 termianl for gnuplot
 #  -DQT  : use qt  terminal for gnuplot
 #
+#  -DCUBA : to compile with cuba library (necessary for the dos task), must have Cuba installed.
+#
 #  -DAZERTY : to use the azerty keyboard layout 
 
 EXEC = c2B
