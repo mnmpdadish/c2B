@@ -2,21 +2,29 @@
 #you can comment para.dat using '#'
 
 #hamiltonian parameters:
-ETA   0.1
-MU   -0.5
+ETA   0.01
+MU    -0.5
 OMEGA 0
-t     1.0
+t     1
 tp   -0.3
-tpp   0.0
-M     0.6
+tpp   0.2
+M     1.0
 D     0.0
+periodization 0
 
 #cuba parameters:
 EPSREL  0.001
-EPSABS  0.0001
-MAXEVAL 100000
-MINEVAL 40
-VERBOSE 1
+EPSABS  0.00001
+MAXEVAL 400000
+MINEVAL 2000
+VERBOSE 0
+
+
+#DOS loop parameters:
+nOmega   2001
+omegaMin -10.
+omegaMax 10.
+
 
 #density loop parameters:
 nMu   201

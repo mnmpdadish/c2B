@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utilities.h"
+#include "model.h"
 #include <vector>
 using namespace std;
 
@@ -25,21 +26,8 @@ public:
                 double px_continuous = M_PI * px/(double)(dimension-1.);
                 double py_continuous = M_PI * py/(double)(dimension-1.);
                 
-                double Ry[4] = {0.,0.,1.,1.};
-                double Rx[4] = {0.,1.,1.,0.};
-                
-                model.calculate_Gk(px_continuous, py_continuous);
-                
-                complex<double> G_per = 0.0;
-                for (int ii=0; ii<4; ++ii) {
-                  for (int jj=0; jj<4; ++jj) {
-                    double arg = ((Rx[jj]-Rx[ii])*px_continuous + (Ry[jj]-Ry[ii])*py_continuous);
-                    complex<double> phase(cos(arg), sin(arg));
-                    G_per += 1. * model.green(ii,jj) * phase; 
-                  }
-                }
-                
-                mdc_data[dimension*px+py]   = -M_1_PI*imag(G_per);
+                model.calculate_Gperiodized(px_continuous, py_continuous);
+                mdc_data[dimension*px+py] = -M_1_PI*imag(model.G_per);
                 
             }
         }
@@ -48,7 +36,17 @@ public:
     void printFile(Model &model)
     {
         calculate(model);
-        FILE *file = fopen("mdc.dat","w");
+        char filename[100];
+        if (model.periodization == 0) {
+            sprintf(filename, "mdc_pG_eta%5.3f_omega%5.3f.dat", model.ETA, model.OMEGA);
+        } else if (model.periodization == 1) {
+            sprintf(filename, "mdc_pM_eta%5.3f_omega%5.3f.dat", model.ETA, model.OMEGA);
+        } else if (model.periodization == 2) {
+            sprintf(filename, "mdc_pC_eta%5.3f_omega%5.3f.dat", model.ETA, model.OMEGA);
+        } else {
+            sprintf(filename, "mdc_eta%5.3f_omega%5.3f.dat", model.ETA, model.OMEGA);
+        }
+        FILE *file = fopen(filename, "w");
         for (int py=0; py<dimension; ++py) {
             for (int px=0; px<dimension; ++px) 
             {
@@ -72,7 +70,7 @@ public:
 private:
     
     int nEntry_;
-    int lastUpdate=0;
+    // int lastUpdate=0;
     
     
 } MDC;

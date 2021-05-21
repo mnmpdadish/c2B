@@ -9,6 +9,7 @@
 #include "model.h"
 #include "utilities.h"
 #include "mdc.h"
+#include "dos.h"
 #include "interactive.h"
 #include "density.h"
 
@@ -31,6 +32,10 @@ void printHelp(){
     printf("  Print mdc.out file. (output = 'mdc.dat')\n");
     printf("  Plot in gnuplot with:\n");
     printf("  gnuplot> plot 'mdc.dat' matrix with image\n\n");
+    printf("$ ./oneBody dos\n");
+    printf("  Print dos.out file. (output = 'dos.dat')\n");
+    printf("  Plot in gnuplot with:\n");
+    printf("  gnuplot> plot 'dos.dat' u 1:2\n\n");
 }
 
 int main(int argc, const char * argv[]) {
@@ -39,6 +44,7 @@ int main(int argc, const char * argv[]) {
         if (opt=="d") {Model model; density(model);}
         else if (opt=="l") {Model model; density_loopMU(model);}
         else if (opt=="mdc") {Model model; MDC mdc(200); mdc.printFile(model);}
+        else if (opt=="dos") {Model model; DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model);}
         #ifdef INTERACTIVE
         else if (opt=="i") {Model model; MDC mdc(200); interactive_mdc(model, mdc);}
         #endif
