@@ -176,39 +176,39 @@ public:
 
     void calculate_Gperiodized(const double px, const double py)
     {
-        double Ry[4] = {0.,0.,1.,1.};
-        double Rx[4] = {0.,1.,1.,0.};
-        complex<double> z(OMEGA,ETA);
-        double epsilon_k = 0;
+      double Ry[4] = {0.,0.,1.,1.};
+      double Rx[4] = {0.,1.,1.,0.};
+      complex<double> z(OMEGA,ETA);
+      double epsilon_k = 0;
 
 
-        calculate_dtk(px, py);
-        calculate_sigma(z);
-        
-        if (periodization==1){
-            calculate_cumulant(z);
-            M_per = 0;
-            for (int ii=0; ii<4; ++ii) {
-                for (int jj=0; jj<4; ++jj) {
-                    double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
-                    complex<double> phase(cos(arg), sin(arg));
-                    M_per += 0.25 * cumul(ii,jj) * phase; 
-                }
-            }
-            epsilon_k = -2*t*(cos(px)+cos(py)) -4*tp*cos(px)*cos(py) -2*tpp*(cos(2*px)+cos(2*py));
-            G_per = 1./((1./M_per) - epsilon_k);
-        }
-        else {
-            calculate_Gk(z);
-            G_per = 0;
-            for (int ii=0; ii<4; ++ii) {
-                for (int jj=0; jj<4; ++jj) {
-                    double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
-                    complex<double> phase(cos(arg), sin(arg));
-                    G_per += 0.25 * green(ii,jj) * phase; 
-                }
-            }
-        }
+      calculate_dtk(px, py);
+      calculate_sigma(z);
+
+      if (periodization==1){
+	calculate_cumulant(z);
+	M_per = 0;
+	for (int ii=0; ii<4; ++ii) {
+	  for (int jj=0; jj<4; ++jj) {
+	    double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
+	    complex<double> phase(cos(arg), sin(arg));
+	    M_per += 0.25 * cumul(ii,jj) * phase; 
+	  }
+	}
+	epsilon_k = -2*t*(cos(px)+cos(py)) -4*tp*cos(px)*cos(py) -2*tpp*(cos(2*px)+cos(2*py));
+	G_per = 1./((1./M_per) - epsilon_k);
+      }
+      else {
+	calculate_Gk(z);
+	G_per = 0;
+	for (int ii=0; ii<4; ++ii) {
+	  for (int jj=0; jj<4; ++jj) {
+	    double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
+	    complex<double> phase(cos(arg), sin(arg));
+	    G_per += 0.25 * green(ii,jj) * phase; 
+	  }
+	}
+      }
     }
 } Model;
 
