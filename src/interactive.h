@@ -55,7 +55,7 @@ void extractValues(Model & model, vector<double> &values){
     values.resize(8);
     values[0] = model.MU;  values[5] = model.OMEGA;  values[6] = model.ETA;
     values[1] = model.t;   values[2] = model.tp;     values[3] = model.tpp;
-    values[4] = model.M;
+    values[4] = model.DELTA;
     return;
 }
 
@@ -65,7 +65,7 @@ void setValues(Model & model, int param, double value){
     if(param==1) model.t  =value;
     if(param==2) model.tp =value;
     if(param==3) model.tpp=value;
-    if(param==4) model.M  =value;
+    if(param==4) model.DELTA=value;
     if(param==5) model.OMEGA=value;
     if(param==6) model.ETA=value;
     return;
@@ -74,7 +74,7 @@ void setValues(Model & model, int param, double value){
 inline void printCompact(vector<double> &values, vector<double> &valuesLast, int lastUpdate=0){   
         
     lineKind(1);
-    string parameterNames[8] = {"mu","t","tp","tpp","M","w","eta"};
+    string parameterNames[7] = {"mu","t","tp","tpp","delta","w","eta"};
     
     char tab[1024];
     for (int i=0;i< 7; i++){
@@ -140,7 +140,7 @@ void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increasePa
     printf("Step =% 1.2f\n",step);
     printf("Controlling keys and corresponding parameters\n");
 
-    string parameterNames[7] = {"mu","t","tp","tpp","M","w","eta"};
+    string parameterNames[7] = {"mu","t","tp","tpp","delta","w","eta"};
     for(int key=0;key<7;key++)
     {  
        printf("%s%s%c%s%c       ",KBOLD,KRED,decreaseParamKeys[key],KGRN,increaseParamKeys[key]);

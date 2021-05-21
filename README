@@ -68,19 +68,19 @@ Any other task than the help needs a "para.dat" file that specify the model
 parameters. An example of a "para.dat" file is contained in the "example" 
 directory. The "para.dat" file can contain the following parameters:
 
-ETA   Lorentzian broadening of the spectral weight
-OMEGA frequency (OMEGA=0 is the Fermi level)
-MU    chemical potential
-t     nearest neighbor hopping energy
-tp    second nearest neighbor hopping energy
-tpp   third nearest neighbor hopping energy
-M     antiferromagntic energy
+ETA    Lorentzian broadening of the spectral weight
+OMEGA  frequency (OMEGA=0 is the Fermi level)
+MU     chemical potential
+t      nearest neighbor hopping energy
+tp     second nearest neighbor hopping energy
+tpp    third nearest neighbor hopping energy
+DELTA  coupling energy
 
-VERBOSE level of verbose of the program
-EPSREL  relative error demanded
-EPSABS  absolute error demanded
-MAXEVAL maximum number of evaluations
-MINEVAL minimum number of evaluations
+VERBOSE  level of verbose of the program
+EPSREL   relative error demanded
+EPSABS   absolute error demanded
+MAXEVAL  maximum number of evaluations
+MINEVAL  minimum number of evaluations
 
 If any of these parameters are not found, default parameters will be used 
 (and printed on the screen). The programme "c2B" should be run in the

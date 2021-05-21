@@ -20,7 +20,7 @@ public:
     double t=1.0;
     double tp=0.0;
     double tpp=0.0;
-    double M=0.0;
+    double DELTA=0.0;
     
     int nbOfTerms=7;
     
@@ -66,7 +66,7 @@ public:
         readNumber(file,"t",t);
         readNumber(file,"tp",tp);
         readNumber(file,"tpp",tpp);
-        readNumber(file,"M",M);
+        readNumber(file,"DELTA",DELTA);
         readNumber(file,"periodization",periodization); //0=green, 1=cumulant, 2=compact tiling, 3=exact
         
         //cuba parameters:
@@ -140,7 +140,7 @@ public:
         for(int i=0;i<sigma.dim;i++)
             for(int j=0;j<sigma.dim;j++)
             {
-                sigma(i,j) = M*M*sigma(i,j);
+                sigma(i,j) = DELTA*DELTA*sigma(i,j);
             }
     }
 
