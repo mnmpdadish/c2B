@@ -64,8 +64,8 @@ typedef struct BasicMatrix {
       zgetrf_(&dim,&dim,data_,&dim,IPIV_,&INFO);
       zgetri_(&dim,data_,&dim,IPIV_,WORK_,&nEntry,&INFO);
       if( !(INFO == 0) ) {
-	printf( "The algorithm failed to invert the matrix.\n" );
-	exit( 1 );
+        printf( "The algorithm failed to invert the matrix.\n" );
+        exit( 1 );
       }
     };
 
@@ -73,9 +73,9 @@ typedef struct BasicMatrix {
     void print() {
       int i, j;
       for( i = 0; i < dim; i++ ) {
-	for( j = 0; j < dim; j++ )
-	  printf( " (% 4.2f,% 4.2f)", real(data_[i+j*dim]), imag(data_[i+j*dim]) );
-	printf( "\n" );
+        for( j = 0; j < dim; j++ )
+          printf( " (% 4.2f,% 4.2f)", real(data_[i+j*dim]), imag(data_[i+j*dim]) );
+        printf( "\n" );
       }
       printf( "\n\n" );
       fflush(stdout);

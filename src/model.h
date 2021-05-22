@@ -54,34 +54,34 @@ typedef struct Model {
 
     Model():
       tc(4), tc2(4), dtk(4), dtk2(4), dtk3(4), green(4), cumul(4), sigma(4)
-  {
-    if (not exists("para.dat")) {printf("ERROR: couldn't find file 'para.dat'\n\n"); exit(1);}
-    printf("reading parameters from para.dat\n\n") ;
-    ifstream file;
-    file.open("para.dat");
+    {
+      if (not exists("para.dat")) {printf("ERROR: couldn't find file 'para.dat'\n\n"); exit(1);}
+      printf("reading parameters from para.dat\n\n") ;
+      ifstream file;
+      file.open("para.dat");
 
-    //model parameters:
-    readNumber(file,"MU",MU); 
-    readNumber(file,"ETA",ETA);
-    readNumber(file,"OMEGA",OMEGA);
-    readNumber(file,"t",t);
-    readNumber(file,"tp",tp);
-    readNumber(file,"tpp",tpp);
-    readNumber(file,"DELTA",DELTA);
-    readNumber(file,"periodization",periodization); //0=green, 1=cumulant, 2=compact tiling, 3=exact
+      //model parameters:
+      readNumber(file,"MU",MU); 
+      readNumber(file,"ETA",ETA);
+      readNumber(file,"OMEGA",OMEGA);
+      readNumber(file,"t",t);
+      readNumber(file,"tp",tp);
+      readNumber(file,"tpp",tpp);
+      readNumber(file,"DELTA",DELTA);
+      readNumber(file,"periodization",periodization); //0=green, 1=cumulant, 2=compact tiling, 3=exact
 
-    //cuba parameters:
-    readNumber(file,"EPSREL",EPSREL);
-    readNumber(file,"EPSABS",EPSABS);
-    readNumber(file,"MAXEVAL",MAXEVAL); 
-    readNumber(file,"MINEVAL",MINEVAL);
-    readNumber(file,"VERBOSE",VERBOSE);
+      //cuba parameters:
+      readNumber(file,"EPSREL",EPSREL);
+      readNumber(file,"EPSABS",EPSABS);
+      readNumber(file,"MAXEVAL",MAXEVAL); 
+      readNumber(file,"MINEVAL",MINEVAL);
+      readNumber(file,"VERBOSE",VERBOSE);
 
-    //dos parameters:
-    readNumber(file,"nOmega",nOmega);
-    readNumber(file,"omegaMin",omegaMin);
-    readNumber(file,"omegaMax",omegaMax);
-  }
+      //dos parameters:
+      readNumber(file,"nOmega",nOmega);
+      readNumber(file,"omegaMin",omegaMin);
+      readNumber(file,"omegaMax",omegaMax);
+    }
 
     void calculate_dtk(const double kx, const double ky)
       //Hk = tk matrix
@@ -129,21 +129,21 @@ typedef struct Model {
     {
       // the self-energy matrix is S = 1/(z+mu-tc2)
       for(int i=0;i<sigma.dim;i++)
-	for(int j=0;j<sigma.dim;j++)
-	{
-	  sigma(i,j) = -tc2(i,j);
-	  if (i==j) sigma(i,j) += z + MU;  
-	  if (periodization==2) sigma(i,j) += -dtk3(i,j);
-	  if (periodization==3) sigma(i,j) += -dtk2(i,j);
-	}
+        for(int j=0;j<sigma.dim;j++)
+        {
+          sigma(i,j) = -tc2(i,j);
+          if (i==j) sigma(i,j) += z + MU;  
+          if (periodization==2) sigma(i,j) += -dtk3(i,j);
+          if (periodization==3) sigma(i,j) += -dtk2(i,j);
+        }
 
       sigma.invert();
 
       for(int i=0;i<sigma.dim;i++)
-	for(int j=0;j<sigma.dim;j++)
-	{
-	  sigma(i,j) = DELTA*DELTA*sigma(i,j);
-	}
+        for(int j=0;j<sigma.dim;j++)
+        {
+          sigma(i,j) = DELTA*DELTA*sigma(i,j);
+        }
     }
 
     void calculate_cumulant(const complex<double> z)
@@ -151,11 +151,11 @@ typedef struct Model {
     {
       // the cumulant matrix is M = 1/(z+mu-Sigma)
       for(int i=0;i<cumul.dim;i++)
-	for(int j=0;j<cumul.dim;j++)
-	{
-	  cumul(i,j) = -sigma(i,j);
-	  if(i==j) cumul(i,j) += z + MU;
-	}
+        for(int j=0;j<cumul.dim;j++)
+        {
+          cumul(i,j) = -sigma(i,j);
+          if(i==j) cumul(i,j) += z + MU;
+        }
       cumul.invert();
     }
 
@@ -165,11 +165,11 @@ typedef struct Model {
     {   
       // the Green matrix is Gk = 1/(z-Hk)
       for(int i=0;i<green.dim;i++)
-	for(int j=0;j<green.dim;j++)
-	{
-	  green(i,j) = -tc(i,j) -dtk(i,j) -sigma(i,j);
-	  if(i==j) green(i,j) += z + MU;
-	}
+        for(int j=0;j<green.dim;j++)
+        {
+          green(i,j) = -tc(i,j) -dtk(i,j) -sigma(i,j);
+          if(i==j) green(i,j) += z + MU;
+        }
       green.invert();
     }
 
@@ -186,28 +186,28 @@ typedef struct Model {
       calculate_sigma(z);
 
       if (periodization==1){
-	calculate_cumulant(z);
-	M_per = 0;
-	for (int ii=0; ii<4; ++ii) {
-	  for (int jj=0; jj<4; ++jj) {
-	    double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
-	    complex<double> phase(cos(arg), sin(arg));
-	    M_per += 0.25 * cumul(ii,jj) * phase; 
-	  }
-	}
-	epsilon_k = -2*t*(cos(px)+cos(py)) -4*tp*cos(px)*cos(py) -2*tpp*(cos(2*px)+cos(2*py));
-	G_per = 1./((1./M_per) - epsilon_k);
+        calculate_cumulant(z);
+        M_per = 0;
+        for (int ii=0; ii<4; ++ii) {
+          for (int jj=0; jj<4; ++jj) {
+            double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
+            complex<double> phase(cos(arg), sin(arg));
+            M_per += 0.25 * cumul(ii,jj) * phase; 
+          }
+        }
+        epsilon_k = -2*t*(cos(px)+cos(py)) -4*tp*cos(px)*cos(py) -2*tpp*(cos(2*px)+cos(2*py));
+        G_per = 1./((1./M_per) - epsilon_k);
       }
       else {
-	calculate_Gk(z);
-	G_per = 0;
-	for (int ii=0; ii<4; ++ii) {
-	  for (int jj=0; jj<4; ++jj) {
-	    double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
-	    complex<double> phase(cos(arg), sin(arg));
-	    G_per += 0.25 * green(ii,jj) * phase; 
-	  }
-	}
+        calculate_Gk(z);
+        G_per = 0;
+        for (int ii=0; ii<4; ++ii) {
+          for (int jj=0; jj<4; ++jj) {
+            double arg = ((Rx[jj]-Rx[ii])*px + (Ry[jj]-Ry[ii])*py);
+            complex<double> phase(cos(arg), sin(arg));
+            G_per += 0.25 * green(ii,jj) * phase; 
+          }
+        }
       }
     }
 } Model;

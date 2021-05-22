@@ -83,9 +83,9 @@ int gridIntegrateDOS(Model &model, double* integral, double* error){
     for(int n = 0; n<ncomp; n++) integral[n] = .0;
     for(int i = 0; i < steps; i++) 
       for(int j = 0; j < steps; j++) {
-	double k[] = {((double)i) / ((double)(steps)) , ((double)j) / ((double)(steps))};
-	dosIntegrand(&NDIM, k, &ncomp, result, userdata);
-	for(int n = 0; n<ncomp; n++) integral[n] += result[n];
+        double k[] = {((double)i) / ((double)(steps)) , ((double)j) / ((double)(steps))};
+        dosIntegrand(&NDIM, k, &ncomp, result, userdata);
+        for(int n = 0; n<ncomp; n++) integral[n] += result[n];
       }
 
     for(int n = 0; n<ncomp; n++) integral[n] /= ((double)(steps*steps)) ;
@@ -94,11 +94,11 @@ int gridIntegrateDOS(Model &model, double* integral, double* error){
     for(int n = 0; n<ncomp; n++) {
       error[n] -= integral[n];
       if(abs(error[n]) > EPSREL*abs(integral[n]) ) {
-	if(abs(error[n]) > EPSABS){
-	  if(steps < (1 << grid_nMax)){
-	    if(n<3) continueFlag=true;  //convergence criterion only check for the first 3 value to integrate here, the one obtained with A^3 and not the integral by part.
-	  }
-	}
+        if(abs(error[n]) > EPSABS){
+          if(steps < (1 << grid_nMax)){
+            if(n<3) continueFlag=true;  //convergence criterion only check for the first 3 value to integrate here, the one obtained with A^3 and not the integral by part.
+          }
+        }
       }
 
     }
@@ -139,12 +139,12 @@ typedef struct DOS {
       //model.model=1;
       for (int w=0; w<resolution; w++) {
 
-	double omega = omega_start + w*(omega_end-omega_start)/(resolution-1);
-	model.OMEGA = omega;
-	int steps_total = cubaIntegrateDOS(model, &integral[0], &error[0]);
-	fprintf(file,"% 5.2f  % 8.6f  % 8.6f\n",omega,integral[0],error[0]);
-	printf("% 5.2f  % 8.6f  % 8.6f    % d\n",omega,integral[0],error[0], steps_total);
-	fflush(file);
+        double omega = omega_start + w*(omega_end-omega_start)/(resolution-1);
+        model.OMEGA = omega;
+        int steps_total = cubaIntegrateDOS(model, &integral[0], &error[0]);
+        fprintf(file,"% 5.2f  % 8.6f  % 8.6f\n",omega,integral[0],error[0]);
+        printf("% 5.2f  % 8.6f  % 8.6f    % d\n",omega,integral[0],error[0], steps_total);
+        fflush(file);
       }
       fclose(file);
       if(model.verbose >= 1) printf("\rDOS file printed.\n");

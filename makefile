@@ -1,9 +1,9 @@
 
 COMPILER := gcc
 
-LINK := -llapack -lblas -lm -lstdc++ #-lcuba 
+LINK := -llapack -lblas -lm -lstdc++ -lcuba 
 
-OPTIONS := -Wall -std=c++11 -O2 #-DCUBA
+OPTIONS := -Wall -std=c++11 -O2 -DCUBA
 # other possibles options:
 #  -DWXT : use wxt terminal for gnuplot
 #  -DX11 : use x11 termianl for gnuplot
