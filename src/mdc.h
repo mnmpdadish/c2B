@@ -64,15 +64,11 @@ typedef struct MDC {
       dimension = inputDim;
       nEntry_= dimension*dimension;
       mdc_data.resize(nEntry_);
-      //gor_data_re.resize(mdc_numberOfKx*mdc_numberOfKy);
-      //gor_data_im.resize(mdc_numberOfKx*mdc_numberOfKy);
     }
 
   private:
 
     int nEntry_;
-    // int lastUpdate=0;
-
 
 } MDC;
 

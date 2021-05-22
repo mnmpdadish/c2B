@@ -1,9 +1,9 @@
 
 COMPILER := gcc
 
-LINK := -llapack -lblas -lm -lstdc++ -lcuba 
+LINK := -llapack -lblas -lm -lstdc++ #-lcuba 
 
-OPTIONS := -Wall -std=c++11 -O2 -DCUBA
+OPTIONS := -Wall -std=c++11 -O2 #-DCUBA
 # other possibles options:
 #  -DWXT : use wxt terminal for gnuplot
 #  -DX11 : use x11 termianl for gnuplot
@@ -11,15 +11,12 @@ OPTIONS := -Wall -std=c++11 -O2 -DCUBA
 #
 #  -DCUBA : to compile with cuba library (necessary for the dos task).
 #           Cuba must installed and '-lcuba' should be added to 
-#           the LINK variable in the makefile.
+#           the LINK variable.
 #
 #  -DAZERTY : to use the azerty keyboard layout 
 
 EXEC = c2B
 
-HEADERS = src/utilities.h
-
-all: executable
-executable: src/c2B.cpp
+all: src/c2B.cpp
 	$(COMPILER) $(OPTIONS) -o $(EXEC) src/c2B.cpp $(LINK)
 

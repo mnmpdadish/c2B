@@ -13,27 +13,15 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
-// part used by gnuplot
-#include "gnuplot_c_mod.h"
-
 #include "mdc.h"
+// part used by gnuplot
+#include "gnuplot_pipe.h"
 
 
-void lineKind(int val) {
-  static int lineKind=1; //initialized only on the first use of the function (static)
-  if (lineKind!=val) {
-    if (lineKind!=0) printf("\n");
-    lineKind=val;
-  }
-  printf("\r");
-  fflush(stdout);
-}
-
-void plotMDC(MDC &mdc, FILE *hImage=NULL){
+void plotMDC(MDC &mdc, int per, FILE *hImage=NULL){
   int Nx=mdc.dimension;    
-  gpc_plot_image(hImage,mdc.mdc_data,Nx,Nx,0.0,6.0,0,0); 
+  gnuplot_image(hImage,mdc.mdc_data,Nx,Nx,0.0,6.0,per); 
 }
-
 
 // define some colors for gnuplot
 #define KNRM  "\x1B[0m"
@@ -41,14 +29,13 @@ void plotMDC(MDC &mdc, FILE *hImage=NULL){
 #define KGRN  "\x1B[32m"
 #define KBOLD "\033[1m"
 
+// red if lower, green if higher than last plotted value
 inline void chooseColor(float val1,float val2){
   float tol = 0.00001;
   if(val1-val2<-tol){printf(KRED);}
   else if(val1-val2>tol){printf(KGRN);}
   else {printf(KNRM);}
 }
-
-
 
 // an alternative way to access parameters (not the best patch).
 void extractValues(Model & model, vector<double> &values){
@@ -69,6 +56,17 @@ void setValues(Model & model, int param, double value){
   if(param==5) model.OMEGA=value;
   if(param==6) model.ETA=value;
   return;
+}
+
+// small function to choose to erase the same line or printing a new line
+void lineKind(int value) {
+  static int last_value=1; //initialized only on the first use of the function (static)
+  if (last_value!=value) {
+    if (last_value!=0) printf("\n");
+    last_value=value;
+  }
+  printf("\r");
+  fflush(stdout);
 }
 
 inline void printCompact(vector<double> &values, vector<double> &valuesLast, int lastUpdate=0){   
@@ -151,12 +149,12 @@ void interactive_mdc(Model &model, MDC & mdc){
   // p was copied
 
   FILE *hImage;
-  hImage = gpc_init_image ();
+  hImage = gnuplot_init();
 
   model.verbose=0;
   //p.mdc_gorgov = true;
   mdc.calculate(model);
-  plotMDC(mdc,hImage);
+  plotMDC(mdc,model.periodization,hImage);
 
   vector<double> values, valuesLast;
   extractValues(model,values); 
@@ -239,7 +237,7 @@ void interactive_mdc(Model &model, MDC & mdc){
         else if(c==')' and step < 10)  { step*=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
         else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
 
-        else if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
+        else if(c==' ') { mdc.calculate(model); plotMDC(mdc,model.periodization,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
         else if(c=='t') { mdc.printFile(model, false);}                
         else if(c=='h') {
           printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
@@ -247,7 +245,7 @@ void interactive_mdc(Model &model, MDC & mdc){
         }
         else if(c=='g') {
           model.periodization = (model.periodization+1)%4;
-          mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
+          mdc.calculate(model); plotMDC(mdc,model.periodization,hImage); lineKind(0);
           if (model.periodization==0) printf("G periodization ");
           if (model.periodization==1) printf("M periodization ");
           if (model.periodization==2) printf("compact tiling  ");
@@ -265,7 +263,7 @@ void interactive_mdc(Model &model, MDC & mdc){
   }
   //next two lines never used because we ctrl-c out of the program.
   //tcsetattr( fileno( stdin ), TCSANOW, &oldSettings );
-  //gpc_close (hImage);
+  //gnuplot_close (hImage);
 }
 
 

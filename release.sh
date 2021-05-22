@@ -5,7 +5,7 @@
 
 cd ..
 tar -cvzf c2B.tar.gz c2B --exclude-vcs-ignores --exclude-vcs --exclude='release.sh'
-mv c2B.tar.gz c2B 
+mv c2B.tar.gz c2B
 
 #options used:
 #--exclude-vcs-ignores:  consider the .hgignore or .gitignore file to ignore files in the tar

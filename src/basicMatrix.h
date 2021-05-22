@@ -84,7 +84,7 @@ typedef struct BasicMatrix {
 
   public: // meh
     int *IPIV_ ;
-    complex<double> *WORK_ ;
+    complex<double> * WORK_;
     complex<double> * data_;   // can be assigned directly
 
 } BasicMatrix;
