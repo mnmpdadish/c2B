@@ -15,7 +15,7 @@ using namespace std;
 
 
 void printHelp(){
-  printf("\nDifferent ways to use 'oneBody':\n\n");
+  printf("\nDifferent ways to use 'c2B':\n\n");
   printf("$ ./c2B i\n");
   printf("  Launch interactive plotting version.\n\n");
   printf("$ ./c2B mdc\n");
