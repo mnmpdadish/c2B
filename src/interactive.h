@@ -130,9 +130,6 @@ void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increasePa
   printf("\t+ -     - change resolution \n"); 
   printf("\t) (     - change steps \n");
   printf("\tt       - save mdc file \n");
-#ifdef CUBA
-  printf("\ty       - compute and save dos file \n");
-#endif
   printf("\tg       - switch between the different 'periodizations' \n");
   printf("\th       - print this help \n\n");
   printf("Resolution = %d by %d\n",mdc.dimension,mdc.dimension);
@@ -180,7 +177,7 @@ void interactive_mdc(Model &model, MDC & mdc){
   printf ("Here is a simple representation of the useful keys on a \n");
   printf ("%sAZERTY keyboard%s:\n\n",KBOLD,KNRM);
   printf ("....(-....)+\n");
-  printf ("%s%sazer%sty%s%suio%s...\n",KBOLD,KGRN,KNRM,KBOLD,KGRN,KNRM);
+  printf ("%s%sazer%st.%s%suio%s...\n",KBOLD,KGRN,KNRM,KBOLD,KGRN,KNRM);
   printf ("%s%sqsdf%sgh%s%sjkl%s...\n",KBOLD,KRED,KNRM,KBOLD,KRED,KNRM);
   printf ("............\n");
   printf (".[ SPACE ]..\n\n");
@@ -196,7 +193,7 @@ void interactive_mdc(Model &model, MDC & mdc){
   printf ("Here is a simple representation of the useful keys on a \n");
   printf ("%sQWERTY keyboard%s:\n\n",KBOLD,KNRM);
   printf ("........()-+\n");
-  printf ("%s%sqwer%sty%s%suio%s...\n",KBOLD,KGRN,KNRM,KBOLD,KGRN,KNRM);
+  printf ("%s%sqwer%st.%s%suio%s...\n",KBOLD,KGRN,KNRM,KBOLD,KGRN,KNRM);
   printf ("%s%sasdf%sgh%s%sjkl%s...\n",KBOLD,KRED,KNRM,KBOLD,KRED,KNRM);
   printf ("............\n");
   printf (".[ SPACE ]..\n\n");
@@ -244,9 +241,6 @@ void interactive_mdc(Model &model, MDC & mdc){
 	else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
 
 	else if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
-#ifdef CUBA
-	else if(c=='y') { DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model); lineKind(0); printf("dos printed"); fflush(stdout);}
-#endif
 	else if(c=='t') { mdc.printFile(model, false);}                
 	else if(c=='h') {
 	  printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);

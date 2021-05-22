@@ -31,9 +31,9 @@ typedef struct BasicMatrix {
 
     ~BasicMatrix()
     {
-      delete data_;
-      delete IPIV_;
-      delete WORK_;
+      delete [] data_;
+      delete [] IPIV_;
+      delete [] WORK_;
     };
 
     //next function, useful to assign or get
