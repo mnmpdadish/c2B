@@ -4,24 +4,16 @@
 //
 
 #pragma once
-#include <cassert>
-//#include <cctype>
-//#include <cstdlib>
 #include <cstring>
 #include <iostream>
-//#include <iosfwd>
 #include <fstream>
-#include <string>
-//#include <sstream>
 #include <limits>
-#include <math.h>
 #include <complex>
 #include <sys/stat.h>
 
 
 #define MAX_LENGHT std::numeric_limits<std::streamsize>::max()
 using namespace std;
-
 
 // NUMBER UTILITIES
 bool dbEqual(const double &a, const double &b) {
@@ -63,8 +55,7 @@ bool readNumber(istream &flux, const string &search, TYPE &value) {
     string line;
     getline(flux,line);
     istringstream buffer(line);
-    string word;
-
+    
     if(buffer.peek() == EOF || buffer.peek() == '\n') {
       cout << search << " = " << value << '\n';
       return false;

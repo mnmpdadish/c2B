@@ -12,7 +12,6 @@ typedef struct MDC {
     int dimension;
     vector<double> mdc_data;
 
-
     MDC(int inputDim)
     {
       resize(inputDim);

@@ -40,7 +40,6 @@ typedef struct Model {
     double omegaMax=4.0;
 
     //matrices
-    int rien;
     BasicMatrix tc;
     BasicMatrix tc2;  // used only for exact lattice and compact tiling
     BasicMatrix dtk;  
@@ -179,9 +178,7 @@ typedef struct Model {
       double Ry[4] = {0.,0.,1.,1.};
       double Rx[4] = {0.,1.,1.,0.};
       complex<double> z(OMEGA,ETA);
-      double epsilon_k = 0;
-
-
+      
       calculate_dtk(px, py);
       calculate_sigma(z);
 
@@ -195,7 +192,7 @@ typedef struct Model {
             M_per += 0.25 * cumul(ii,jj) * phase; 
           }
         }
-        epsilon_k = -2*t*(cos(px)+cos(py)) -4*tp*cos(px)*cos(py) -2*tpp*(cos(2*px)+cos(2*py));
+        double epsilon_k = -2*t*(cos(px)+cos(py)) -4*tp*cos(px)*cos(py) -2*tpp*(cos(2*px)+cos(2*py));
         G_per = 1./((1./M_per) - epsilon_k);
       }
       else {

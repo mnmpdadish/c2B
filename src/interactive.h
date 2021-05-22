@@ -15,6 +15,7 @@
 #include <termios.h>
 // part used by gnuplot
 #include "gnuplot_c_mod.h"
+
 #include "mdc.h"
 
 
@@ -157,10 +158,9 @@ void interactive_mdc(Model &model, MDC & mdc){
   mdc.calculate(model);
   plotMDC(mdc,hImage);
 
-  vector<double> values, valuesLast, valuesInit;
+  vector<double> values, valuesLast;
   extractValues(model,values); 
   valuesLast = values;
-  valuesInit = values;
 
   float step=0.05;
 
@@ -224,37 +224,36 @@ void interactive_mdc(Model &model, MDC & mdc){
     if( res > 0 )
     {
       model.verbose=0;
-      char c;
       char ch[2561];
       if (read( fileno( stdin ), &ch, 2561 )==1){
-	c=ch[0];
-	for(int key=0;key<7;key++)
-	{
-	  if(c==increaseParamKeys[key]) {updateAmplitude(model, key, +step,values,valuesLast,key);}
-	  else if(c==decreaseParamKeys[key]) {updateAmplitude(model, key, -step,values,valuesLast,key);}
-	}
+        char c=ch[0];
+        for(int key=0;key<7;key++)
+        {
+          if(c==increaseParamKeys[key]) {updateAmplitude(model, key, +step,values,valuesLast,key);}
+          else if(c==decreaseParamKeys[key]) {updateAmplitude(model, key, -step,values,valuesLast,key);}
+        }
 
-	if(c=='+')      { mdc.resize(mdc.dimension+100); lineKind(4); printf("resolution= %4d by %4d\r",mdc.dimension,mdc.dimension); fflush(stdout);}
-	else if(c=='-') { mdc.resize(mdc.dimension-100); lineKind(4); printf("resolution= %4d by %4d\r",mdc.dimension,mdc.dimension); fflush(stdout);}
+        if(c=='+')      { mdc.resize(mdc.dimension+100); lineKind(4); printf("resolution= %4d by %4d\r",mdc.dimension,mdc.dimension); fflush(stdout);}
+        else if(c=='-') { mdc.resize(mdc.dimension-100); lineKind(4); printf("resolution= %4d by %4d\r",mdc.dimension,mdc.dimension); fflush(stdout);}
 
-	else if(c==')' and step < 10)  { step*=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
-	else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
+        else if(c==')' and step < 10)  { step*=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
+        else if(c=='(' and step > 0.001) { step/=10; lineKind(5); printf("steps=%1.3f%50s\r",step,""); fflush(stdout);}
 
-	else if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
-	else if(c=='t') { mdc.printFile(model, false);}                
-	else if(c=='h') {
-	  printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
-	  printCompact(values,valuesLast);
-	}
-	else if(c=='g') {
-	  model.periodization = (model.periodization+1)%4;
-	  mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
-	  if (model.periodization==0) printf("G periodization ");
-	  if (model.periodization==1) printf("M periodization ");
-	  if (model.periodization==2) printf("compact tiling  ");
-	  if (model.periodization==3) printf("exact           ");
-	  fflush(stdout);
-	}
+        else if(c==' ') { mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0); valuesLast=values; printCompact(values,valuesLast); }
+        else if(c=='t') { mdc.printFile(model, false);}                
+        else if(c=='h') {
+          printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
+          printCompact(values,valuesLast);
+        }
+        else if(c=='g') {
+          model.periodization = (model.periodization+1)%4;
+          mdc.calculate(model); plotMDC(mdc,hImage); lineKind(0);
+          if (model.periodization==0) printf("G periodization ");
+          if (model.periodization==1) printf("M periodization ");
+          if (model.periodization==2) printf("compact tiling  ");
+          if (model.periodization==3) printf("exact           ");
+          fflush(stdout);
+        }
 
       }
     }
