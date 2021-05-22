@@ -9,6 +9,7 @@ a simple one-body model through using gnuplot.
 
 ################
 MAIN REPOSITORY:
+################
 
 To get the most recent version of the source code on this project,
 in command line on a bash terminal (represented here with the "$" sign), type:
@@ -18,6 +19,7 @@ $ git clone https://github.com/mnmpdadish/c2B.git
 
 ##########
 COMPILING:
+##########
 
 In order to compile, install gcc, gfortran, Lapack, Gnuplot and 
 Cuba (optional) on your computer and type in the source code 
