@@ -39,7 +39,7 @@ This makefile should work on Linux and Mac.
 
 + **Gnuplot**: In principle Any version of gnuplot should be enough to run the 
                interactive version of the program properly, "$ ./c2B i" but the code 
-               was developped using only version 5.0. If gnuplot is not installed, the 
+               was developed using only version 5.0. If gnuplot is not installed, the 
                interactive version will not work, but the task mdc will still work.
 
       Troubleshooting:
@@ -55,7 +55,7 @@ This makefile should work on Linux and Mac.
 + **Cuba** (optional): An integration library available via http://www.feynarts.de/cuba/
                        Version 4.0 or higher should be used to work and compile correctly.
                        This is only required in the calculation of the DOS, but by default
-                       this functionnality is turned off. To enable it, one must install
+                       this functionality is turned off. To enable it, one must install
                        Cuba and add the flag -DCUBA to the compilation option in the makefile.
 
 # RUN:

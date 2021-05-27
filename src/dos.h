@@ -30,7 +30,7 @@ int cubaIntegrateDOS(Model &model, double* result, double* error){
   void* userdata=&model;
   int NDIM=2;                     // number of dimensions
   int ncomp=1;                    // number of components of the integrand (could be a vector) // here, it is the argument of var result
-  int nvec=1;                     // number of samples passed to integrand; usually 1 (here it can be larger than the one passed to the Integrand.. why? no one knows)
+  int nvec=1;                     // number of samples passed to integrand; usually 1.
   double EPSREL=0.001;
   if (model.EPSREL!=0) EPSREL=model.EPSREL;
   double EPSABS=0.0001;

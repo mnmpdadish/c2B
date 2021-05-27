@@ -41,10 +41,10 @@ typedef struct Model {
 
     //matrices
     BasicMatrix tc;
-    BasicMatrix tc2;  // used only for exact lattice and compact tiling
+    BasicMatrix tc2;  // used only for the exact lattice and the compact tiling
     BasicMatrix dtk;  
-    BasicMatrix dtk2; // used only for exact lattice
-    BasicMatrix dtk3; // used only for compact tiling
+    BasicMatrix dtk2; // used only for the exact lattice
+    BasicMatrix dtk3; // used only for the compact tiling
     BasicMatrix green;
     BasicMatrix cumul;
     BasicMatrix sigma;
