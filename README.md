@@ -1,4 +1,6 @@
+# ###
 # c2B
+# ###
 
 This code calculates the spectral weight and DOS (2D square lattice).
 The most interesting part is the interactive plot that can explore 
@@ -38,17 +40,17 @@ This makefile should work on Linux and Mac.
 + **Gnuplot**: In principle Any version of gnuplot should be enough to run the 
                interactive version of the program properly, "$ ./c2B i" but the code 
                was developped using only version 5.0. If gnuplot is not installed, the 
-               interactive version will not work. 
+               interactive version will not work, but the task mdc will still work.
 
       Troubleshooting:
          - If the interactive task stop, install Gnuplot.
-         - If the program does not stop but no gnuplot plot appears,
-           make sure you have the right terminal. By default, 'qt' is used,
-           but you can also choose 'x11' or 'wxt'. Check which terminal is use by default
-           by starting gnuplot, the line "Terminal type set to 'qt'" to specify
-           which terminal is used. Then change the terminal in the makefile before 
-           compilation using either the option "-DQT" for 'qt', "-DWXT" for 'wxt' or
-           "-DX11" for 'x11'. By default, 'qt' is used.
+         - If the program does not stop but no gnuplot plot appears, make sure 
+           you have the right terminal. By default, 'qt' is used, but you 
+           can also choose 'x11' or 'wxt'. Check which terminal is use by default
+           by starting gnuplot, the line above the command line "Terminal type set 
+           to 'qt'", for example, specify which terminal is used. Then change the 
+           terminal in the makefile before compilation using either the option "-DQT" 
+           for 'qt', "-DWXT" for 'wxt' or "-DX11" for 'x11'. By default, 'qt' is used.
 
 + **Cuba** (optional): An integration library available via http://www.feynarts.de/cuba/
                        Version 4.0 or higher should be used to work and compile correctly.
@@ -66,8 +68,8 @@ $ ./c2B
 
 Read this help to learn about the different tasks available ('i', 'mdc', 'dos').
 Any other task than the help needs a "para.dat" file that specify the model 
-parameters. An example of a "para.dat" file is contained in the "example" 
-directory. The "para.dat" file can contain the following parameters:
+parameters. An example of "para.dat" files are contained in the "fig1" and 
+"fig2" directories. The "para.dat" file can contain the following parameters:
 
 ```
 ETA            Lorentzian broadening of the spectral weight
@@ -78,20 +80,16 @@ tp             second nearest neighbor hopping energy
 tpp            third nearest neighbor hopping energy
 DELTA          coupling energy
 periodization  choice of periodization (0=green, 1=cumulant, 2=compact tiling, 3=exact)
-```
 
-```
-VERBOSE  level of verbose of the program
-EPSREL   relative error demanded
-EPSABS   absolute error demanded
-MAXEVAL  maximum number of evaluations
-MINEVAL  minimum number of evaluations
-```
+VERBOSE        level of verbose of the program
+EPSREL         relative error
+EPSABS         absolute error
+MAXEVAL        maximum number of evaluations
+MINEVAL        minimum number of evaluations
 
-```
-nOmega    number of frequency to calculate for the DOS
-omegaMin  minimum frequency to calculate for the DOS
-omegaMax  maximum frequency to calculate for the DOS
+nOmega         number of frequency to calculate for the DOS
+omegaMin       minimum frequency to calculate for the DOS
+omegaMax       maximum frequency to calculate for the DOS
 ```
 
 If any of these parameters are not found, default parameters will be used 
