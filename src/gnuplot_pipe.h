@@ -8,13 +8,22 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+// user imposed terminal choice (optional)
 #ifdef  WXT
-#define _TERMINAL "wxt"
+  #define _TERMINAL "wxt"
 #elif X11
-#define _TERMINAL "x11"
+  #define _TERMINAL "x11"
+#elif QT
+  #define _TERMINAL "qt"
+// default terminal choice
+#elif  __APPLE__
+  #define _TERMINAL "qt"
+#elif __linux
+  #define _TERMINAL "wxt"
 #else 
-#define _TERMINAL "qt" // default terminal
+  #define _TERMINAL "x11"
 #endif
+
 
 FILE *gnuplot_init ()
 {

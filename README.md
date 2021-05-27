@@ -12,7 +12,7 @@ a simple one-body model through using gnuplot.
 To get the most recent version of the source code on this project,
 in command line on a bash terminal (represented here with the "$" sign), type:
 
-```bash
+```
 $ git clone https://github.com/mnmpdadish/c2B.git
 ```
 
@@ -22,35 +22,36 @@ In order to compile, install gcc, gfortran, Lapack, Gnuplot and
 Cuba (optional) on your computer and type in the source code 
 root directory:
 
-```bash
+```
 $ make
 ```
 
 This makefile should work on Linux and Mac.
 
 
-# DEPENDENCIES:
+## DEPENDENCIES:
 
-+ **gcc**: Tested with version 4.8.1. Must be recent enough.
++ **gcc**: Tested with version 4.8.1 and 9.3.0. Must be recent enough.
 
-+ **gfortran**: Tested with version 4.6.4. Must be recent enough.
++ **gfortran**: Tested with version 4.6.4 and 9.3.0. Must be recent enough.
 
 + **Lapack**: Tested with version 3.5.0. Must be recent enough.
 
-+ **Gnuplot**: In principle Any version of gnuplot should be enough to run the 
-               interactive version of the program properly, "$ ./c2B i" but the code 
-               was developed using only version 5.0. If gnuplot is not installed, the 
-               interactive version will not work, but the task mdc will still work.
++ **Gnuplot**: Tested with version 5.0. If gnuplot is not installed, the 
+               interactive version will not work, but the task 'mdc' will still work.
 
       Troubleshooting:
          - If the interactive task stop, install Gnuplot.
          - If the program does not stop but no gnuplot plot appears, make sure 
-           you have the right terminal. By default, 'qt' is used, but you 
-           can also choose 'x11' or 'wxt'. Check which terminal is use by default
-           by starting gnuplot, the line above the command line "Terminal type set 
-           to 'qt'", for example, specify which terminal is used. Then change the 
-           terminal in the makefile before compilation using either the option "-DQT" 
-           for 'qt', "-DWXT" for 'wxt' or "-DX11" for 'x11'. By default, 'qt' is used.
+           you have the right terminal. By default, 'qt' is used for Mac and 
+           'wxt' is used for Linux (test on Ubuntu). If the default value does not
+           work (program still runs but no windows appears), check which terminal 
+           is use by default by starting gnuplot in command line. A bunch of line 
+           should be printed on the screen, and the last, the line above the "gnuplot>"
+           command line should be the one specifying the terminal. For example:
+           "Terminal type set to 'wxt'". To change the terminal used, you need to add a
+           commpilation option to the makefile before compilation using either the option 
+           "-DQT" for 'qt', "-DWXT" for 'wxt' or "-DX11" for 'x11'.
 
 + **Cuba** (optional): An integration library available via http://www.feynarts.de/cuba/
                        Version 4.0 or higher should be used to work and compile correctly.
@@ -58,11 +59,11 @@ This makefile should work on Linux and Mac.
                        this functionality is turned off. To enable it, one must install
                        Cuba and add the flag -DCUBA to the compilation option in the makefile.
 
-# RUN:
+## RUN:
 
 To check how to use the code, type:
 
-```bash
+```
 $ ./c2B
 ```
 
@@ -97,7 +98,7 @@ If any of these parameters are not found, default parameters will be used
 directory where the program "c2B" is called. 
 
 
-# EXAMPLES:
+## EXAMPLES:
 
 Examples of input and results files are found in the "fig1" and "fig2"
 directories. Informations on how to reproduce these results by running 
@@ -106,7 +107,7 @@ these parameter files create the results shown in Fig. 1 and 2 of the
 article.
 
 
-# USAGE:
+## USAGE:
 
 This software is released under [MIT](https://choosealicense.com/licenses/mit/) 
 License (see LICENSE file). Please consider citing this code and the associated 

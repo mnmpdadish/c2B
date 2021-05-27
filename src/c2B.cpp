@@ -4,7 +4,11 @@
 //
 
 #define _USE_MATH_DEFINES
+
+#ifdef CUBA
 #include "cuba.h"
+#endif
+
 #include "model.h"
 #include "utilities.h"
 #include "mdc.h"
