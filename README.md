@@ -67,7 +67,7 @@ $ ./c2B
 ```
 
 Read this help to learn about the different tasks available ('i', 'mdc', 'dos').
-Any other task than the help needs a "para.dat" file that specify the model 
+Any other task than the help needs a "para.dat" file that specifies the model 
 parameters. An example of "para.dat" files are contained in the "fig1" and 
 "fig2" directories. The "para.dat" file can contain the following parameters:
 
@@ -94,14 +94,14 @@ omegaMax       maximum frequency to calculate for the DOS
 
 If any of these parameters are not found, default parameters will be used 
 (and printed on the screen). A file "para.dat" must be present in the 
-directory where the programme "c2B" is called. 
+directory where the program "c2B" is called. 
 
 
 # EXAMPLES:
 
 Examples of input and results files are found in the "fig1" and "fig2"
 directories. Informations on how to reproduce these results by running 
-the code are found in the "README" of each directory. As the name suggest,
+the code are found in the "README" of each directory. As the name suggests,
 these parameter files create the results shown in Fig. 1 and 2 of the 
 article.
 
