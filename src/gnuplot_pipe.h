@@ -36,7 +36,7 @@ int gnuplot_image (FILE *plot_pipe, vector<double> data, int Nx, int Ny, float z
   fprintf (plot_pipe, "set term %s noraise size %d, %d font 'Helvetica,12'\n", TERMINAL, 820, 800); // Set the plot
 #else 
   fprintf (plot_pipe, "if  (GPVAL_TERM eq 'wxt'){set term wxt noraise size %d, %d font 'Helvetica,12';\n", 820, 800); 
-  fprintf (plot_pipe, "} else {if(GPVAL_TERM eq 'qt') {set term wqt noraise size %d, %d font 'Helvetica,12';\n", 820, 800); 
+  fprintf (plot_pipe, "} else {if(GPVAL_TERM eq 'qt') {set term qt noraise size %d, %d font 'Helvetica,12';\n", 820, 800); 
   fprintf (plot_pipe, "} else {if(GPVAL_TERM eq 'x11')  {set term x11 noraise size %d, %d font 'Helvetica,12';}}}\n", 820, 800); 
 #endif
   //fprintf (plot_pipe, "set term %s noraise size %d, %d font 'Helvetica,12'\n", _TERMINAL, 820, 800); // Set the plot
