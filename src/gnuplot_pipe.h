@@ -20,17 +20,6 @@ FILE *gnuplot_init ()
   //plot_pipe = popen ("gnuplot > /dev/null 2>&1", "w");  // Open plot_pipe to Gnuplot and check for error
   plot_pipe = popen ("gnuplot", "w");  // Open plot_pipe to Gnuplot and check for error
 
-  //fprintf (plot_pipe, "set term %s\n", _TERMINAL); // Set the plot
-  fflush (plot_pipe);                                    // flush the plot_pipe
-  return (plot_pipe);
-}
-
-int gnuplot_image (FILE *plot_pipe, vector<double> data, int Nx, int Ny, float zMin=0.0, float zMax=6.0, int periodization=0)
-{
-  int i, j;
-  char title[80];
-
-
 // user imposed terminal choice (optional)
 #ifdef  TERMINAL
   fprintf (plot_pipe, "set term %s noraise size %d, %d font 'Helvetica,12'\n", TERMINAL, 820, 800); // Set the plot
@@ -41,7 +30,17 @@ int gnuplot_image (FILE *plot_pipe, vector<double> data, int Nx, int Ny, float z
 #endif
   //fprintf (plot_pipe, "set term %s noraise size %d, %d font 'Helvetica,12'\n", _TERMINAL, 820, 800); // Set the plot
   //printf ("set term %s size %d, %d\n", _TERMINAL, 800, 800); // Set the plot
-  
+
+  //fprintf (plot_pipe, "set term %s\n", _TERMINAL); // Set the plot
+  fflush (plot_pipe);                                    // flush the plot_pipe
+  return (plot_pipe);
+}
+
+int gnuplot_image (FILE *plot_pipe, vector<double> data, int Nx, int Ny, float zMin=0.0, float zMax=6.0, int periodization=0)
+{
+  int i, j;
+  char title[80];
+
   if(periodization==0)      {sprintf(title,"MDC - G periodization");}
   else if(periodization==1) {sprintf(title,"MDC - M periodization");}
   else if(periodization==2) {sprintf(title,"MDC - compact tiling ");}
