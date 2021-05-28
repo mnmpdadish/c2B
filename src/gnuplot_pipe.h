@@ -8,32 +8,17 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-// user imposed terminal choice (optional)
-#ifdef  WXT
-  #define _TERMINAL "wxt"
-#elif X11
-  #define _TERMINAL "x11"
-#elif QT
-  #define _TERMINAL "qt"
-// default terminal choice
-#elif  __APPLE__
-  #define _TERMINAL "qt"
-#elif __linux
-  #define _TERMINAL "wxt"
-#else 
-  #define _TERMINAL "x11"
-#endif
-
 
 FILE *gnuplot_init ()
 {
   FILE *plot_pipe;
 
-  printf ("\nIf the program stop here, please make sure that\n");
-  printf ("gnuplot is installed on your system and the right terminal\n");
-  printf ("in gnuplot is selected. See README and 'makefile' for details.\n\n");
+  printf ("\nIf the program stop here, please make sure\n");
+  printf ("that gnuplot is installed on your system.\n");
+  printf ("See README and 'makefile' for details.\n\n");
 
-  plot_pipe = popen ("gnuplot > /dev/null 2>&1", "w");  // Open plot_pipe to Gnuplot and check for error
+  //plot_pipe = popen ("gnuplot > /dev/null 2>&1", "w");  // Open plot_pipe to Gnuplot and check for error
+  plot_pipe = popen ("gnuplot", "w");  // Open plot_pipe to Gnuplot and check for error
 
   //fprintf (plot_pipe, "set term %s\n", _TERMINAL); // Set the plot
   fflush (plot_pipe);                                    // flush the plot_pipe
@@ -44,7 +29,17 @@ int gnuplot_image (FILE *plot_pipe, vector<double> data, int Nx, int Ny, float z
 {
   int i, j;
   char title[80];
-  fprintf (plot_pipe, "set term %s noraise size %d, %d font 'Helvetica,12'\n", _TERMINAL, 820, 800); // Set the plot
+
+
+// user imposed terminal choice (optional)
+#ifdef  TERMINAL
+  fprintf (plot_pipe, "set term %s noraise size %d, %d font 'Helvetica,12'\n", TERMINAL, 820, 800); // Set the plot
+#else 
+  fprintf (plot_pipe, "if  (GPVAL_TERM eq 'wxt'){set term wxt noraise size %d, %d font 'Helvetica,12';\n", 820, 800); 
+  fprintf (plot_pipe, "} else {if(GPVAL_TERM eq 'qt') {set term wqt noraise size %d, %d font 'Helvetica,12';\n", 820, 800); 
+  fprintf (plot_pipe, "} else {if(GPVAL_TERM eq 'x11')  {set term x11 noraise size %d, %d font 'Helvetica,12';}}}\n", 820, 800); 
+#endif
+  //fprintf (plot_pipe, "set term %s noraise size %d, %d font 'Helvetica,12'\n", _TERMINAL, 820, 800); // Set the plot
   //printf ("set term %s size %d, %d\n", _TERMINAL, 800, 800); // Set the plot
   
   if(periodization==0)      {sprintf(title,"MDC - G periodization");}

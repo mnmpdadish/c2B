@@ -43,15 +43,18 @@ This makefile should work on Linux and Mac.
       Troubleshooting:
          - If the interactive task stop, install Gnuplot.
          - If the program does not stop but no gnuplot plot appears, make sure 
-           you have the right terminal. By default, 'qt' is used for Mac and 
-           'wxt' is used for Linux (test on Ubuntu). If the default value does not
-           work (program still runs but no windows appears), check which terminal 
-           is use by default by starting gnuplot in command line. A bunch of line 
-           should be printed on the screen, and the last, the line above the "gnuplot>"
-           command line should be the one specifying the terminal. For example:
-           "Terminal type set to 'wxt'". To change the terminal used, you need to add a
-           commpilation option to the makefile before compilation using either the option 
-           "-DQT" for 'qt', "-DWXT" for 'wxt' or "-DX11" for 'x11'.
+           you have the right terminal. By default, if your gnuplot use 'qt', 'wxt' 
+           or 'x11', the program will automatically detect it. In the case this automatic 
+           detection does not work, the last line printed on the screen will be:
+           "No output will be generated. Please select a terminal with 'set terminal'."
+           In that case, you must stop the program (CTRL-C) and check which terminal is 
+           used by default when you start gnuplot in command line. At the start of gnuplot, 
+           a bunch of line should be printed on the screen, and the last line above the 
+           "gnuplot>" command line should be the one specifying the terminal. For example: 
+           "Terminal type set to 'wxt'". To change the terminal in this code, you need to 
+           add a compilation option in the makefile. For example, the flag: 
+           -DTERMINAL=\"x11\" forces the use of terminal x11.
+           
 
 + **Cuba** (optional): An integration library available via http://www.feynarts.de/cuba/
                        Version 4.0 or higher should be used to work and compile correctly.
@@ -83,8 +86,8 @@ DELTA          coupling energy
 periodization  choice of periodization (0=green, 1=cumulant, 2=compact tiling, 3=exact)
 
 VERBOSE        level of verbose of the program
-EPSREL         relative error
-EPSABS         absolute error
+EPSREL         relative error tolerated
+EPSABS         absolute error tolerated
 MAXEVAL        maximum number of evaluations
 MINEVAL        minimum number of evaluations
 
