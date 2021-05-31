@@ -1,38 +1,23 @@
-MAMMOUTH := $(shell echo $(pbsserver)) # should return empty, 'ms' or 'mp2'
 
-ifeq ($(MAMMOUTH),ms )
-   COMPILER :=g++
-   LINK := -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lcuba
-   OPTIONS = -O2 -fpermissive -std=c++0x -DSUPRA
-   EXEC = oneBody_ms
+COMPILER := gcc
 
-else ifeq ($(MAMMOUTH),mp2 )
-   COMPILER :=g++
-   LINK := -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lcuba
-   OPTIONS := -O2 -fpermissive -std=c++11 -DSUPRA
-   EXEC = oneBody_mp
+LINK := -llapack -lblas -lm -lstdc++ #-lcuba 
 
-else
-   COMPILER := gcc
-   #MKL := /opt/intel/mkl/lib/intel64  #only to compile with MKL
-   #LINK := -lcuba -lstdc++  ${MKL}/libmkl_intel_lp64.a -Wl,--start-group $(MKL)/libmkl_blas95_lp64.a $(MKL)/libmkl_lapack95_lp64.a $(MKL)/libmkl_sequential.a ${MKL}/libmkl_core.a -Wl,--end-group  -lgomp -lpthread -lm -ldl
-   
-   UNAME_S := $(shell uname -s)
-   ifeq ($(UNAME_S),Linux)
-      LINK := -lcuba -llapack -lblas -lm -lstdc++
-   endif
-   ifeq ($(UNAME_S),Darwin)
-      LINK := -lcuba -llapack -lblas -lm -lstdc++
-   endif
-   
-   OPTIONS := -fpermissive -Wall -std=c++11 -DINTERACTIVE -O2 
-   #-DSUPRA 
-   EXEC = oneBody
-endif
+OPTIONS := -Wall -std=c++11 -O2 #-DCUBA
+# other possible options:
+#  -DCUBA : to compile with cuba library (necessary for the dos task).
+#           Cuba must be installed and '-lcuba' should be added to 
+#           the LINK variable. See README file for details.
+#
+#  -DAZERTY : to use the AZERTY keyboard layout intead of the QWERTY.
+#
+#  -DTERMINAL : specify the terminal you want. For example:
+#               -DTERMINAL=\"x11\" force the terminal x11 instead 
+#               of the default terminal. See README file for details.
 
-HEADERS = src/utilities.h
 
-all: executable
-executable: src/oneBody.cpp
-	$(COMPILER) $(OPTIONS) -o $(EXEC) src/oneBody.cpp $(LINK)
+EXEC = c2B
+
+all: src/c2B.cpp
+	$(COMPILER) $(OPTIONS) -o $(EXEC) src/c2B.cpp $(LINK)
 

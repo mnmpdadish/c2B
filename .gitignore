@@ -1,13 +1,9 @@
-oneBody
+c2B
 *.o
 src/tmp/*
-example/n.out
 example/mdc.dat
 ./mdc.dat
 *.out
 *.tar.gz
+src/tmp.h
 
-onebody/mdc.dat
-onebody/n.out
-onebody/example/n.out
-onebody/example/mdc.dat
