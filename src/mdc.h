@@ -1,3 +1,10 @@
+/* 
+*  mdc.h
+*    Project: c2B
+*    Author: Simon Verret
+*    License: MIT License
+*/
+
 #pragma once
 
 #include "utilities.h"

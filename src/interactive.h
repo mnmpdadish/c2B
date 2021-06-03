@@ -1,11 +1,12 @@
-//
-//  interactive.h
-//  c2B
-//
+/* 
+*  interactive.h
+*    Project: c2B
+*    Author: Maxime Charlebois
+*    License: MIT License
+*/
 
 #pragma once
 
-// part used by stdin (keyboard capture)
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -13,8 +14,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
+
 #include "mdc.h"
-// part used by gnuplot
 #include "gnuplot_pipe.h"
 
 
@@ -69,6 +70,7 @@ void lineKind(int value) {
   fflush(stdout);
 }
 
+// print the values (numbers) with the color to say if the value is raised or lowered
 inline void printCompact(vector<double> &values, vector<double> &valuesLast, int lastUpdate=0){   
 
   lineKind(1);
@@ -89,7 +91,8 @@ inline void printCompact(vector<double> &values, vector<double> &valuesLast, int
 }
 
 
-inline void updateAmplitude(Model & model, int index1, float step, vector<double> & values, vector<double> & valuesLast , int lastUpdate=0){   // could be somewhere
+// update the value of the amplitude
+inline void updateAmplitude(Model & model, int index1, float step, vector<double> & values, vector<double> & valuesLast , int lastUpdate=0){ 
   lastUpdate=index1;
   if(index1 < model.nbOfTerms){
     values[index1] +=step;
@@ -106,9 +109,11 @@ inline void emptyBuffer()
   fflush(stdin);
 }
 
+// give keyboard focus of the terminal to the application.
 inline void prepareTerminalInputs()
 {
-  /////////simple trick to get the input from terminal:
+  // simple trick to get the input from terminal.
+  // taken from http://www.cplusplus.com/forum/unices/11910/
   struct termios oldSettings, newSettings;    
   tcgetattr( fileno( stdin ), &oldSettings ); // get settings
   newSettings = oldSettings;
@@ -146,13 +151,11 @@ void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increasePa
 }
 
 void interactive_mdc(Model &model, MDC & mdc){
-  // p was copied
-
+  
   FILE *hImage;
   hImage = gnuplot_init();
 
   model.verbose=0;
-  //p.mdc_gorgov = true;
   mdc.calculate(model);
   plotMDC(mdc,model.periodization,hImage);
 
@@ -200,14 +203,12 @@ void interactive_mdc(Model &model, MDC & mdc){
 
 #endif
 
-  //printf("Type 'h' for help. Controllable parameters are : \n");
-  //printCompact(values,valuesLast);
   printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
   printCompact(values,valuesLast);
 
   prepareTerminalInputs();
 
-  while ( 1 ) // yes, 1
+  while ( 1 ) // yes!
   {
     fd_set set;
     struct timeval tv;

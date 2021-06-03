@@ -1,7 +1,9 @@
-//
-//  utilities.h
-//  c2B
-//
+/* 
+*  utilities.h
+*    Project: c2B
+*    Author: Maxime Charlebois
+*    License: MIT License
+*/
 
 #pragma once
 #include <cstring>

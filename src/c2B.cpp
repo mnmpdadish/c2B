@@ -1,7 +1,9 @@
-//
-//  c2B.cpp
-//  c2B
-//
+/* 
+*  c2B.cpp
+*    Project: c2B
+*    Authors: Maxime Charlebois, Simon Verret
+*    License: MIT License
+*/
 
 #define _USE_MATH_DEFINES
 
@@ -40,9 +42,9 @@ int main(int argc, const char * argv[]) {
 #ifdef CUBA
       Model model; DOS dos(model.omegaMin, model.omegaMax, model.nOmega); dos.printFile(model);
 #else
-      printf("\n\nPlease compile with option -DCUBA and make sure you have\n");
-      printf("the integration library Cuba installed. Add -lcuba to the LINK. \n");
-      printf("See README for more information.\n");
+      printf("\n\nPlease compile with option -DCUBA and make sure you\n");
+      printf("have the numerical integration library Cuba installed. \n");
+      printf("Add -lcuba to the LINK. See README for more information.\n");
 #endif
     }
     else if (opt=="i") {Model model; MDC mdc(200); interactive_mdc(model, mdc);}

@@ -1,7 +1,9 @@
-//
-//  model.h
-//  c2B
-//
+/* 
+*  model.h
+*    Project: c2B
+*    Author: Maxime Charlebois, Simon Verret
+*    License: MIT License
+*/
 
 #pragma once
 

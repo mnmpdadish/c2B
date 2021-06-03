@@ -1,7 +1,9 @@
-//
-//  dos.h
-//  c2B
-//
+/* 
+*  dos.h
+*    Project: c2B
+*    Authors: Maxime Charlebois, Simon Verret
+*    License: MIT License
+*/
 
 #pragma once
 

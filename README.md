@@ -56,11 +56,12 @@ This makefile should work on Linux and Mac.
            -DTERMINAL=\"x11\" forces the use of terminal x11.
            
 
-+ **Cuba** (optional): An integration library available via http://www.feynarts.de/cuba/
++ **Cuba** (optional): An numerical integration library available via http://www.feynarts.de/cuba/
                        Version 4.0 or higher should be used to work and compile correctly.
                        This is only required in the calculation of the DOS, but by default
                        this functionality is turned off. To enable it, one must install
-                       Cuba and add the flag -DCUBA to the compilation option in the makefile.
+                       Cuba and add the flag -DCUBA to the compilation option in the makefile
+                       and add -lcuba to the LINK variable.
 
 ## RUN:
 
@@ -115,4 +116,5 @@ article.
 This software is released under [MIT](https://choosealicense.com/licenses/mit/) 
 License (see LICENSE file). Please consider citing this code and the associated 
 arxiv and Physical Review article if you reuse this code for your own research.
+See the full citation in the most recent release on the github.
 

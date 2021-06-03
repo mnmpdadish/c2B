@@ -1,7 +1,10 @@
-//
-//  basicMatrix.h
-//  c2B
-//
+/* 
+*  basicMatrix.h
+*    Project: c2B
+*    Authors: Maxime Charlebois, Simon Verret
+*    License: MIT License
+*/
+
 
 #pragma once
 #include "utilities.h"
@@ -68,7 +71,6 @@ typedef struct BasicMatrix {
         exit( 1 );
       }
     };
-
 
     void print() {
       int i, j;
