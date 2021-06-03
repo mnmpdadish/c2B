@@ -3,23 +3,21 @@
 
 #hamiltonian parameters:
 ETA   0.005
-MU    -0.85
+MU   -0.85
 OMEGA 0
-t     1
+t     1.0
 tp   -0.3
 tpp   0.2
 DELTA 1.1
-periodization 0
- 
+
 #cuba parameters:
-EPSREL  0.001
-EPSABS  0.00001
-MAXEVAL 400000
-MINEVAL 2000
-VERBOSE 1
- 
+EPSREL  0.00001
+EPSABS  0.0001
+MAXEVAL 1000000
+MINEVAL 100000
+
 #DOS loop parameters:
-nOmega   501
-omegaMin -2.
+nOmega   501 
+omegaMin -2. 
 omegaMax 2.
 
