@@ -1,7 +1,7 @@
 /* 
 *  mdc.h
 *    Project: c2B
-*    Author: Simon Verret
+*    Authors: Maxime Charlebois, Simon Verret
 *    License: MIT License
 */
 

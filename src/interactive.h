@@ -1,7 +1,7 @@
 /* 
 *  interactive.h
 *    Project: c2B
-*    Author: Maxime Charlebois
+*    Authors: Maxime Charlebois, Simon Verret
 *    License: MIT License
 */
 
@@ -81,8 +81,9 @@ inline void printCompact(vector<double> &values, vector<double> &valuesLast, int
     strcpy(tab, parameterNames[i].c_str());
     if(lastUpdate==i) printf(KBOLD);
     chooseColor(values[i],valuesLast[i]);
-    printf("%s=% 5.3f  ",tab,values[i]);  
+    printf("%s=% 5.3f",tab,values[i]);  
     if(i==3) printf("   ");  
+    else if(i!=6) printf("  ");  
     printf(KNRM);
   }
   chooseColor(0.0,0.0);
@@ -143,9 +144,10 @@ void printHelp(double step, MDC &mdc, char decreaseParamKeys[] , char increasePa
   string parameterNames[7] = {"mu","t","tp","tpp","delta","w","eta"};
   for(int key=0;key<7;key++)
   {
-    printf("%s%s%c%s%c       ",KBOLD,KRED,decreaseParamKeys[key],KGRN,increaseParamKeys[key]);
+    printf("%s%s%c%s%c",KBOLD,KRED,decreaseParamKeys[key],KGRN,increaseParamKeys[key]);
     for(unsigned int l=0; l<parameterNames[key].length(); l++) printf(" ");  // fill space with the parameter lenght name
-    if(key==3) printf("   ");  
+    if(key==3) printf("        ");  
+    else if(key!=6) printf("       ");  
   }
   printf("%s\n",KNRM);
 }
@@ -169,46 +171,41 @@ void interactive_mdc(Model &model, MDC & mdc){
   printf("resolution = %d by %d\n",mdc.dimension,mdc.dimension);
   printf("step =% 1.2f\n\n",step);
 
+  printf ("Give the focus to your terminal and use your keyboard keys.\n");
+  printf ("Here is a simple representation of the useful keys on a \n");  
+
 #ifdef AZERTY
 
   char increaseParamKeys[] =  { 'a', 'z', 'e', 'r', 'u', 'i', 'o', 'p', '\0' };
   char decreaseParamKeys[] =  { 'q', 's', 'd', 'f', 'j', 'k', 'l', 'm', '\0' };
-
-  printf ("Give the focus to your terminal and use your keyboard keys.\n");
-  printf ("Here is a simple representation of the useful keys on a \n");
   printf ("%sAZERTY keyboard%s:\n\n",KBOLD,KNRM);
   printf ("....(-....)+\n");
   printf ("%s%sazer%st.%s%suio%s...\n",KBOLD,KGRN,KNRM,KBOLD,KGRN,KNRM);
   printf ("%s%sqsdf%sgh%s%sjkl%s...\n",KBOLD,KRED,KNRM,KBOLD,KRED,KNRM);
-  printf ("............\n");
-  printf (".[ SPACE ]..\n\n");
-  printf ("See help below to learn the effect of each key.\n\n");
-  fflush(stdout);
 
 #else    
 
   char increaseParamKeys[] =  { 'q', 'w', 'e', 'r', 'u', 'i', 'o', 'p', '\0' };
   char decreaseParamKeys[] =  { 'a', 's', 'd', 'f', 'j', 'k', 'l', ';', '\0' };
-
-  printf ("Give the focus to your terminal and use your keyboard keys.\n");
-  printf ("Here is a simple representation of the useful keys on a \n");
   printf ("%sQWERTY keyboard%s:\n\n",KBOLD,KNRM);
   printf ("........()-+\n");
   printf ("%s%sqwer%st.%s%suio%s...\n",KBOLD,KGRN,KNRM,KBOLD,KGRN,KNRM);
   printf ("%s%sasdf%sgh%s%sjkl%s...\n",KBOLD,KRED,KNRM,KBOLD,KRED,KNRM);
+
+#endif
+
   printf ("............\n");
   printf (".[ SPACE ]..\n\n");
   printf ("See help below to learn the effect of each key.\n\n");
   fflush(stdout);
 
-#endif
 
   printHelp(step,mdc,decreaseParamKeys,increaseParamKeys);
   printCompact(values,valuesLast);
 
   prepareTerminalInputs();
 
-  while ( 1 ) // yes!
+  while(1) // yes!
   {
     fd_set set;
     struct timeval tv;

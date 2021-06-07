@@ -1,7 +1,7 @@
 /* 
 *  utilities.h
 *    Project: c2B
-*    Author: Maxime Charlebois
+*    Authors: Maxime Charlebois, Simon Verret
 *    License: MIT License
 */
 
