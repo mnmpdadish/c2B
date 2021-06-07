@@ -6,4 +6,4 @@ example/mdc.dat
 *.out
 *.tar.gz
 src/tmp.h
-
+tmp

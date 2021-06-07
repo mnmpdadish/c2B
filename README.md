@@ -1,6 +1,4 @@
-# ###
 # c2B
-# ###
 
 This code calculates the spectral weight and DOS (2D square lattice).
 The most interesting part is the interactive plot that can explore 

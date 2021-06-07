@@ -1,6 +1,4 @@
-# ####
-# fig2
-# ####
+# Figure 2
 
 This directory contains the para.dat necessary to reproduce the c2B results
 in figure 2 of the article. Results that you should obtain running the

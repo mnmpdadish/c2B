@@ -4,7 +4,7 @@
 #$ ./release.sh
 
 cd ..
-tar -cvzf c2B.tar.gz c2B --exclude-vcs-ignores --exclude-vcs --exclude='release.sh'
+tar -cvzf c2B.tar.gz --exclude-vcs-ignores --exclude-vcs --exclude='release.sh' c2B 
 mv c2B.tar.gz c2B
 
 #options used:

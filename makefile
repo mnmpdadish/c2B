@@ -21,3 +21,5 @@ EXEC = c2B
 all: src/c2B.cpp
 	$(COMPILER) $(OPTIONS) -o $(EXEC) src/c2B.cpp $(LINK)
 
+clean:
+	rm c2B*
